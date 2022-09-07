@@ -87,6 +87,6 @@ private: // メンバ変数
 	
 	Model* modelTurret = nullptr;
 
-	bool direction = nullptr;
+	bool direction = false;
 };
 

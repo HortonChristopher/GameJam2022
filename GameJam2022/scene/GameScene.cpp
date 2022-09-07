@@ -99,7 +99,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 void GameScene::Update()
 {
-	/*if (input->TriggerKey(DIK_SPACE))
+	if (input->TriggerKey(DIK_SPACE))
 	{
 		if (direction == true)
 		{
@@ -109,19 +109,21 @@ void GameScene::Update()
 		{
 			direction = true;
 		}
-	}*/
+	}
 
-	objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
-	objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
+	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
+	//objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
 	
-	/*if (direction)
+	if (direction)
 	{
-		objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
+		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 50.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 50.0f)) });
+		objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - 1.0f, 0.0f });
 	}
 	else
 	{
-		objTurret->SetPosition({ (objTurret->GetPosition().x + (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z - (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
-	}*/
+		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 50.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 50.0f)) });
+		objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
+	}
 
 	objTurret->Update();
 
