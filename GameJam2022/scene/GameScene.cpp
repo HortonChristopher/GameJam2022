@@ -98,29 +98,22 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	for (int i = 0; i < 4; i++)
 	{
-		int RNG = rand() % 1;
-		int RNG2 = rand() % 1;
-		if (RNG == 1)
+		RNG[i] = rand() % 4;
+
+		switch (RNG[i])
 		{
-			if (RNG2 == 1)
-			{
-				enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 101 - 150.0f });
-			}
-			else
-			{
-				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
-			}
-		}
-		else
-		{
-			if (RNG2 == 1)
-			{
-				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
-			}
-			else
-			{
-				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 + 50.0f });
-			}
+		case 0:
+			enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 201 - 100.0f });
+			break;
+		case 1:
+			enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 201 - 100.0f });
+			break;
+		case 2:
+			enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 - 150.0f });
+			break;
+		case 3:
+			enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 + 50.0f });
+			break;
 		}
 	}
 
@@ -222,30 +215,22 @@ void GameScene::Update()
 
 		if (timer[i] > timeToTarget[i])
 		{
-			int RNG = rand() % 1;
-			int RNG2 = rand() % 1;
+			RNG[i] = rand() % 4;
 
-			if (RNG == 1)
+			switch (RNG[i])
 			{
-				if (RNG2 == 1)
-				{
-					enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 101 - 150.0f });
-				}
-				else
-				{
-					enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
-				}
-			}
-			else
-			{
-				if (RNG2 == 1)
-				{
-					enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
-				}
-				else
-				{
-					enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 + 50.0f });
-				}
+			case 0:
+				enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 201 - 100.0f });
+				break;
+			case 1:
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 201 - 100.0f });
+				break;
+			case 2:
+				enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 - 150.0f });
+				break;
+			case 3:
+				enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 + 50.0f });
+				break;
 			}
 
 			enemyBool[i] = false;

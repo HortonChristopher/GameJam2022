@@ -101,5 +101,6 @@ private: // メンバ変数
 	std::array<float, 4> z{ {0.0f, 0.0f, 0.0f, 0.0f} };
 	std::array<int, 4> timer{ {0,0,0,0} };
 	std::array<float, 4> timeToTarget{ {0.0f, 0.0f, 0.0f} };
+	std::array<int, 4> RNG{ {0,0,0,0} };
 };
 
