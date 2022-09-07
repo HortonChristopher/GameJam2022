@@ -64,18 +64,26 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
+	objTurret = Object3d::Create();
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
+	modelTurret = Model::CreateFromOBJ("chr_sword");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
+	objTurret->SetModel(modelTurret);
 
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
+	objTurret->SetPosition({ 0.0f, 10.0f, -28.5f });
+	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
 
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
+	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
+
+	//objTurret->SetRotation({ 0.0f, 180.0f, 0.0f });
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -86,11 +94,37 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// カメラ注視点をセット
 	camera->SetTarget({0.0f, 0.0f, 0.0f});
 	camera->SetUp({ 0, 1, 0 });
-	camera->SetDistance(48.0f);
+	//camera->SetDistance(128.0f);
 }
 
 void GameScene::Update()
 {
+	/*if (input->TriggerKey(DIK_SPACE))
+	{
+		if (direction == true)
+		{
+			direction = false;
+		}
+		else
+		{
+			direction = true;
+		}
+	}*/
+
+	objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
+	objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
+	
+	/*if (direction)
+	{
+		objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
+	}
+	else
+	{
+		objTurret->SetPosition({ (objTurret->GetPosition().x + (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z - (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
+	}*/
+
+	objTurret->Update();
+
 	camera->Update();
 
 	lightGroup->Update();
@@ -100,16 +134,16 @@ void GameScene::Update()
 	objGround->Update();
 
 	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
+	char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", objectPosition.x);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", objectPosition.y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objectPosition.z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	sprintf_s(msgbuf, 256, "X: %f\n", objTurret->GetPosition().x);
+	sprintf_s(msgbuf2, 256, "Y: %f\n", objTurret->GetPosition().y);
+	sprintf_s(msgbuf3, 256, "Z: %f\n", objTurret->GetPosition().z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);
 	//Debug End
 }
 
@@ -138,8 +172,9 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3D Object Drawing
-	objSkydome->Draw();
-	objGround->Draw();
+	//objSkydome->Draw();
+	//objGround->Draw();
+	objTurret->Draw();
 
 	// パーティクルの描画
 	particleMan->Draw(cmdList);

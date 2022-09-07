@@ -80,7 +80,13 @@ private: // メンバ変数
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
 
+	Object3d* objTurret = nullptr;
+
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
+	
+	Model* modelTurret = nullptr;
+
+	bool direction = nullptr;
 };
 

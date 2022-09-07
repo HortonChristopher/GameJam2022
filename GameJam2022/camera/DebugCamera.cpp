@@ -27,25 +27,25 @@ void DebugCamera::Update()
 	Input::float2 stickMove = input->GetRStickDirection();
 
 	// Rotate the camera if the right mouse button is pressed
-	//if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
-	//{
-	//	float dy;
+	if (input->PushMouseRight() || input->PushRStickLeft() || input->PushRStickRight())
+	{
+		float dy, dx;
 
-	//	if (input->PushMouseRight())
-	//	{
-	//		dy = mouseMove.lX * scaleY;
-	//		//float dx = mouseMove.lY * scaleX;
-	//	}
-	//	if (input->PushRStickLeft() || input->PushRStickRight())
-	//	{
-	//		dy = stickMove.x * -scaleY * 10.0f;
-	//	}
+		if (input->PushMouseRight())
+		{
+			dy = mouseMove.lX * scaleY;
+			dx = mouseMove.lY * scaleX;
+		}
+		if (input->PushRStickLeft() || input->PushRStickRight())
+		{
+			dy = stickMove.x * -scaleY * 10.0f;
+		}
 
-	//	//angleX = dx * XM_PI;
-	//	angleY = dy * XM_PI;
+		angleX = dx * XM_PI;
+		angleY = dy * XM_PI;
 
-	//	dirty = true;
-	//}
+		dirty = true;
+	}
 
 	// Translate the camera if the middle mouse button is pressed
 	/*if (input->PushMouseMiddle())
@@ -108,15 +108,16 @@ void DebugCamera::Update()
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
 		XMMATRIX matRotNew = XMMatrixIdentity();
-		matRotNew *= XMMatrixRotationX(-angleX);
-		matRotNew *= XMMatrixRotationY(-angleY);
+		//matRotNew *= XMMatrixRotationX(-angleX);
+		//matRotNew *= XMMatrixRotationY(-angleY);
 		// 累積の回転行列を合成
 		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
 		// クォータニオンを使用する方が望ましい
 		matRot = matRotNew * matRot;
 
 		// 注視点から視点へのベクトルと、上方向ベクトル
-		XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
+		//XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
+		XMVECTOR vTargetEye = { 0.0f, 0.0f, 1.0f, 1.0f };
 		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 		// ベクトルを回転
@@ -125,7 +126,7 @@ void DebugCamera::Update()
 
 		// 注視点からずらした位置に視点座標を決定
 		const XMFLOAT3& target = GetTarget();
-		SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 10.0f, target.z + vTargetEye.m128_f32[2] });
+		SetEye({ target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1] + 140.0f, target.z + vTargetEye.m128_f32[2] });
 		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1], vUp.m128_f32[2] });
 	}
 
