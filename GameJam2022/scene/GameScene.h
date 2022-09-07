@@ -14,6 +14,7 @@
 #include "Object3D.h"
 
 #include <vector>
+#include <array>
 
 /// <summary>
 /// ゲームシーン
@@ -81,12 +82,24 @@ private: // メンバ変数
 	Object3d* objGround = nullptr;
 
 	Object3d* objTurret = nullptr;
+	Object3d* objLife = nullptr;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	
 	Model* modelTurret = nullptr;
+	Model* modelLife = nullptr;
 
 	bool direction = false;
+	bool speedBoost = false;
+
+	Model* enemyModel = nullptr;
+	std::array<Object3d*, 4> enemyArray{ {} };
+	std::array<bool, 4> enemyBool{ {false, false, false, false} };
+
+	std::array<float, 4> x{ {0.0f, 0.0f, 0.0f, 0.0f} };
+	std::array<float, 4> z{ {0.0f, 0.0f, 0.0f, 0.0f} };
+	std::array<int, 4> timer{ {0,0,0,0} };
+	std::array<float, 4> timeToTarget{ {0.0f, 0.0f, 0.0f} };
 };
 
