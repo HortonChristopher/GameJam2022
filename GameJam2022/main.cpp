@@ -76,6 +76,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 
 	Object3d::StaticInitialize(dxCommon->GetDevice());
 
+	Enemy::StaticInitialize(dxCommon->GetDevice());
+
 	// FBX
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 #pragma endregion
@@ -94,7 +96,6 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 		input->Update();
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
-
 		
 		// Render Texture Drawing
 		postEffect->PreDrawScene(dxCommon->GetCommandList());

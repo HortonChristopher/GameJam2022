@@ -12,6 +12,7 @@
 #include "LightGroup.h"
 #include "FBXGeneration.h"
 #include "Object3D.h"
+#include "Enemy.h"
 
 #include <vector>
 #include <array>
@@ -62,7 +63,7 @@ public: // メンバ関数
 	void Draw();
 
 	// パーティクル生成
-	void CreateParticles();
+	void CreateParticles(float x, float z);
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
@@ -96,9 +97,9 @@ private: // メンバ変数
 	bool direction = false;
 	bool speedBoost = false;
 
-	Model* enemyModel = nullptr;
+	//Model* enemyModel = nullptr;
 
-	std::array<Object3d*, 4> enemyArray{ {} };
+	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
 
 	std::array<float, 4> x{ {0.0f, 0.0f, 0.0f, 0.0f} };

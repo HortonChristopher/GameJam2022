@@ -43,6 +43,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	// Camera set
 	Object3d::SetCamera(camera);
+	Enemy::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
@@ -72,64 +73,28 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	for (int i = 0; i < 4; i++)
 	{
-		enemyArray[i] = Object3d::Create();
+		enemyArray[i] = Enemy::Create(nullptr, dxCommon);
 	}
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelTurret = Model::CreateFromOBJ("chr_sword");
 	modelLife = Model::CreateFromOBJ("sphere");
-	enemyModel = Model::CreateFromOBJ("box1x1x1");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objTurret->SetModel(modelTurret);
 	objLife->SetModel(modelLife);
 
-	for (int i = 0; i < 4; i++)
-	{
-		enemyArray[i]->SetModel(enemyModel);
-	}
-
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objTurret->SetPosition({ 0.0f, 10.0f, 0.0f });
 	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
 
-	for (int i = 0; i < 4; i++)
-	{
-		RNG[i] = rand() % 4;
-
-		switch (RNG[i])
-		{
-		case 0:
-			enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 201 - 100.0f });
-			break;
-		case 1:
-			enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 201 - 100.0f });
-			break;
-		case 2:
-			enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 - 150.0f });
-			break;
-		case 3:
-			enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 + 50.0f });
-			break;
-		}
-	}
-
-	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
-
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
 	objLife->SetScale({ 3.0f, 3.0f, 3.0f });
-
-	for (int i = 0; i < 4; i++)
-	{
-		enemyArray[i]->SetScale({ 5.0f, 5.0f, 5.0f });
-	}
-
-	//objTurret->SetRotation({ 0.0f, 180.0f, 0.0f });
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -166,9 +131,6 @@ void GameScene::Update()
 		speedBoost = false;
 	}
 
-	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
-	//objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
-
 	if (direction)
 	{
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
@@ -194,65 +156,36 @@ void GameScene::Update()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	// パーティクル生成
+	if (input->TriggerKey(DIK_RETURN))
 	{
-		if (!enemyBool[i])
+		for (int i = 0; i < 4; i++)
 		{
-			timeToTarget[i] = rand() % 300 + 60;
-
-			x[i] = (objLife->GetPosition().x - enemyArray[i]->GetPosition().x) / timeToTarget[i];
-			z[i] = (objLife->GetPosition().z - enemyArray[i]->GetPosition().z) / timeToTarget[i];
-			//float x2 = objLife->GetPosition().x - enemyArray[i]->GetPosition().x;
-			//float z2 = objLife->GetPosition().z - enemyArray[i]->GetPosition().z;
-			//float radians = atan2(z2, x2);
-			//float degrees = XMConvertToDegrees(radians);
-			enemyBool[i] = true;
-		}
-		XMFLOAT3 position = { enemyArray[i]->GetPosition().x, 10.0f, enemyArray[i]->GetPosition().z };
-		enemyArray[i]->SetPosition({ position.x + x[i], 10.0f, position.z + z[i] });
-
-		timer[i]++;
-
-		if (timer[i] > timeToTarget[i])
-		{
-			RNG[i] = rand() % 4;
-
-			switch (RNG[i])
-			{
-			case 0:
-				enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 201 - 100.0f });
-				break;
-			case 1:
-				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 201 - 100.0f });
-				break;
-			case 2:
-				enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 - 150.0f });
-				break;
-			case 3:
-				enemyArray[i]->SetPosition({ rand() % 201 - 100.0f, 10.0f, rand() % 101 + 50.0f });
-				break;
-			}
-
-			enemyBool[i] = false;
-			timer[i] = 0;
+			CreateParticles(enemyArray[i]->GetPosition().x, enemyArray[i]->GetPosition().z);
 		}
 	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		if (enemyArray[i]->destruction)
+		{
+			CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
+		}
+	}
+	
 	objTurret->Update();
 	objLife->Update();
+
+	particleMan->Update();
 
 	for (int i = 0; i < 4; i++)
 	{
 		enemyArray[i]->Update();
 	}
 
-	// パーティクル生成
-	CreateParticles();
-
 	camera->Update();
 
 	lightGroup->Update();
-	particleMan->Update();
 
 	objSkydome->Update();
 	objGround->Update();
@@ -294,6 +227,7 @@ void GameScene::Draw()
 
 #pragma region 3D描画
 	Object3d::PreDraw(cmdList);
+	Enemy::PreDraw(cmdList);
 
 	// 3D Object Drawing
 	//objSkydome->Draw();
@@ -310,6 +244,7 @@ void GameScene::Draw()
 	particleMan->Draw(cmdList);
 
 	Object3d::PostDraw();
+	Enemy::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
@@ -328,15 +263,15 @@ void GameScene::Draw()
 #pragma endregion
 }
 
-void GameScene::CreateParticles()
+void GameScene::CreateParticles(float x, float z)
 {
 	for (int i = 0; i < 10; i++) {
 		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 10.0f;
+		const float rnd_pos = 5.0f;
 		XMFLOAT3 pos{};
-		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.x = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + x;
+		pos.y = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + 10.0f;
+		pos.z = ((float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f) + z;
 
 		const float rnd_vel = 0.1f;
 		XMFLOAT3 vel{};
@@ -349,7 +284,7 @@ void GameScene::CreateParticles()
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 
 		// 追加
-		particleMan->Add(60, pos, vel, acc, 1.0f, 0.0f);
+		particleMan->Add(120, pos, vel, acc, 1.0f, 0.0f);
 	}
 }
 
