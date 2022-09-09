@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <stdlib.h>
 #include <time.h>
+#include "camera.h"
 
 using namespace DirectX;
 
@@ -20,7 +21,7 @@ GameScene::~GameScene()
 	safe_delete(lightGroup);
 }
 
-void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
+void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 {
 	srand(time(NULL));
 
@@ -47,7 +48,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
 		assert(0);
-		return ;
+		return;
 	}
 	// デバッグテキスト初期化
 	debugText = DebugText::GetInstance();
@@ -62,8 +63,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// パーティクルマネージャ生成
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
+	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
 
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
@@ -145,7 +145,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	lightGroup = LightGroup::Create();
 
 	// カメラ注視点をセット
-	camera->SetTarget({0.0f, 0.0f, 0.0f});
+	camera->SetTarget({ 0.0f, 0.0f, 0.0f });
 	camera->SetUp({ 0, 1, 0 });
 	//camera->SetDistance(128.0f);
 }
@@ -175,7 +175,7 @@ void GameScene::Update()
 
 	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
 	//objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
-	
+
 	if (direction)
 	{
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
@@ -216,7 +216,7 @@ void GameScene::Update()
 			enemyBool[i] = true;
 		}
 		XMFLOAT3 position = { enemyArray[i]->GetPosition().x, 10.0f, enemyArray[i]->GetPosition().z };
-		enemyArray[i]->SetPosition({ position.x + x[i], 10.0f, position.z + z[i]});
+		enemyArray[i]->SetPosition({ position.x + x[i], 10.0f, position.z + z[i] });
 
 		timer[i]++;
 
@@ -260,6 +260,9 @@ void GameScene::Update()
 	{
 		enemyArray[i]->Update();
 	}
+
+	// パーティクル生成
+	CreateParticles();
 
 	camera->Update();
 
@@ -338,6 +341,31 @@ void GameScene::Draw()
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
+}
+
+void GameScene::CreateParticles()
+{
+	for (int i = 0; i < 10; i++) {
+		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 10.0f;
+		XMFLOAT3 pos{};
+		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		const float rnd_vel = 0.1f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// 追加
+		particleMan->Add(60, pos, vel, acc, 1.0f, 0.0f);
+	}
 }
 
 int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH)

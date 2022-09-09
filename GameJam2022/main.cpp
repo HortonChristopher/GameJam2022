@@ -73,8 +73,6 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 
 	// ライト静的初期化
 	LightGroup::StaticInitialize(dxCommon->GetDevice());
-	// パーティクルマネージャ初期化
-	ParticleManager::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	Object3d::StaticInitialize(dxCommon->GetDevice());
 

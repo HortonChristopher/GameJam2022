@@ -9,9 +9,7 @@
 
 #include "Camera.h"
 
-/// <summary>
-/// パーティクルマネージャ
-/// </summary>
+// パーティクルマネージャ
 class ParticleManager
 {
 private: // エイリアス
@@ -48,7 +46,6 @@ public: // サブクラス
 		using XMFLOAT3 = DirectX::XMFLOAT3;
 		using XMFLOAT4 = DirectX::XMFLOAT4;
 		using XMMATRIX = DirectX::XMMATRIX;
-
 	public:
 		// 座標
 		XMFLOAT3 position = {};
@@ -79,63 +76,33 @@ public: // サブクラス
 private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
 
-public:// 静的メンバ関数
-	static ParticleManager* GetInstance();
+public: // 静的メンバ関数
+	// インスタンス生成
+	static ParticleManager* Create(ID3D12Device* device, Camera* camera);
 
 public: // メンバ関数	
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <returns></returns>
-	void Initialize(ID3D12Device* device);
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
+	// 初期化
+	void Initialize();
+
+	// 毎フレーム処理
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw(ID3D12GraphicsCommandList * cmdList);
+	// 描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	/// <summary>
-	/// カメラのセット
-	/// </summary>
-	/// <param name="camera">カメラ</param>
-	inline void SetCamera(Camera* camera) { this->camera = camera; }
+	// パーティクルの追加
+	void Add(int life, const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel, float start_scale, float end_scale);
 
-	/// <summary>
-	/// パーティクルの追加
-	/// </summary>
-	/// <param name="life">生存時間</param>
-	/// <param name="position">初期座標</param>
-	/// <param name="velocity">速度</param>
-	/// <param name="accel">加速度</param>
-	/// <param name="start_scale">開始時スケール</param>
-	/// <param name="end_scale">終了時スケール</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale );
-
-	/// <summary>
-	/// デスクリプタヒープの初期化
-	/// </summary>
-	/// <returns></returns>
+	// デスクリプタヒープの初期化
 	void InitializeDescriptorHeap();
 
-	/// <summary>
-	/// グラフィックパイプライン生成
-	/// </summary>
-	/// <returns>成否</returns>
+	// グラフィックパイプライン生成
 	void InitializeGraphicsPipeline();
 
-	/// <summary>
-	/// テクスチャ読み込み
-	/// </summary>
-	/// <returns>成否</returns>
+	// テクスチャ読み込み
 	void LoadTexture();
 
-	/// <summary>
-	/// モデル作成
-	/// </summary>
+	// モデル作成
 	void CreateModel();
 
 private: // メンバ変数
@@ -166,9 +133,6 @@ private: // メンバ変数
 	// カメラ
 	Camera* camera = nullptr;
 private:
-	ParticleManager() = default;
-	ParticleManager(const ParticleManager&) = delete;
-	~ParticleManager() = default;
-	ParticleManager& operator=(const ParticleManager&) = delete;
+	// コンストラクタ
+	ParticleManager(ID3D12Device* device, Camera* camera);
 };
-

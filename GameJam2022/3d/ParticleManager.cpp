@@ -34,18 +34,24 @@ const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
 	return result;
 }
 
-ParticleManager * ParticleManager::GetInstance()
+ParticleManager* ParticleManager::Create(ID3D12Device* device, Camera* camera)
 {
-	static ParticleManager instance;
-	return &instance;
+	// 3Dオブジェクトのインスタンスを生成
+	ParticleManager* partMan = new ParticleManager(device, camera);
+	if (partMan == nullptr) {
+		return nullptr;
+	}
+
+	// 初期化
+	partMan->Initialize();
+
+	return partMan;
 }
 
-void ParticleManager::Initialize(ID3D12Device* device)
+void ParticleManager::Initialize()
 {
 	// nullptrチェック
 	assert(device);
-
-	this->device = device;
 
 	HRESULT result;
 
@@ -65,7 +71,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff)&~0xff),
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuff));
@@ -105,7 +111,7 @@ void ParticleManager::Update()
 
 		// スケールの線形補間
 		it->rotation = it->s_rotation + (it->e_rotation - it->s_rotation) / f;
-	}	
+	}
 
 	// 頂点バッファへデータ転送
 	int vertCount = 0;
@@ -137,7 +143,7 @@ void ParticleManager::Update()
 	constBuff->Unmap(0, nullptr);
 }
 
-void ParticleManager::Draw(ID3D12GraphicsCommandList * cmdList)
+void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	UINT drawNum = (UINT)std::distance(particles.begin(), particles.end());
 	if (drawNum > vertexCount) {
@@ -158,7 +164,7 @@ void ParticleManager::Draw(ID3D12GraphicsCommandList * cmdList)
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-		
+
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 
@@ -174,7 +180,7 @@ void ParticleManager::Draw(ID3D12GraphicsCommandList * cmdList)
 	cmdList->DrawInstanced(drawNum, 1, 0, 0);
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
+void ParticleManager::Add(int life, const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel, float start_scale, float end_scale)
 {
 	// リストに要素を追加
 	particles.emplace_front();
@@ -239,7 +245,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/ParticlePS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/ParticlePS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -262,7 +268,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 
 	// ジオメトリシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/ParticleGS.hlsl",	// シェーダファイル名
+		L"Resources/Shaders/ParticleGS.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "gs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -392,7 +398,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/effect1.png", WIC_FLAGS_NONE,
+		L"Resources/effect4.png", WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
@@ -459,7 +465,7 @@ void ParticleManager::CreateModel()
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPos)*vertexCount),
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPos) * vertexCount),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&vertBuff));
@@ -470,6 +476,12 @@ void ParticleManager::CreateModel()
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeof(VertexPos)*vertexCount;
+	vbView.SizeInBytes = sizeof(VertexPos) * vertexCount;
 	vbView.StrideInBytes = sizeof(VertexPos);
+}
+
+ParticleManager::ParticleManager(ID3D12Device* device, Camera* camera)
+{
+	this->device = device;
+	this->camera = camera;
 }
