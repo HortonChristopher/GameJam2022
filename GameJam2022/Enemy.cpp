@@ -337,6 +337,7 @@ void Enemy::Update()
 		//CreateParticles(position.x, position.z);
 		destruction = true;
 		timer = timeToTarget + 1;
+		enemyDefeated++; //デバッグのみ
 	}
 
 	if (timer > timeToTarget)

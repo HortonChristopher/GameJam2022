@@ -136,7 +136,7 @@ void GameScene::Update()
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
 		{
-			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 1.0f, 0.0f });
+			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + playerSpeedLevel, 0.0f }); // playerSpeedLevel = スピード
 		}
 		else
 		{
@@ -148,12 +148,18 @@ void GameScene::Update()
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
 		{
-			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - 1.0f, 0.0f });
+			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - playerSpeedLevel, 0.0f }); // playerSpeedLevel = スピード
 		}
 		else
 		{
 			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - 2.0f, 0.0f });
 		}
+	}
+
+	if (enemyArray[0]->enemyDefeated > 4) // デバッグのみ
+	{
+		playerSpeedLevel++;
+		enemyArray[0]->enemyDefeated = 0;
 	}
 
 	// パーティクル生成
