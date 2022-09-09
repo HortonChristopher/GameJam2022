@@ -61,6 +61,9 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	// パーティクル生成
+	void CreateParticles();
+
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
 private: // メンバ変数
@@ -94,6 +97,7 @@ private: // メンバ変数
 	bool speedBoost = false;
 
 	Model* enemyModel = nullptr;
+
 	std::array<Object3d*, 4> enemyArray{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
 
