@@ -100,11 +100,26 @@ private: // メンバ変数
 	bool direction = false;
 	bool speedBoost = false;
 
+	//Model* enemyModel = nullptr;
+
+	// プレイヤーレベル
+	float playerLevel = 1;
+
+	// プレイヤースピード管理
 	float playerSpeed = 0.0f;
 	float playerSpeedLevel1 = 1.0;
 	float playerSpeedLevel2 = 2.0;
 	float playerSpeedLevel3 = 3.0;
-	float playerLevel = 1;
+
+	// プレイヤーバレットタイプ管理
+	bool playerBulletType;
+	bool normalBullet;
+	bool spreadBullet;
+
+	// プレイヤーボム
+	float playerBombGage = 0;
+	float BombGageMax = 20;
+	bool bombFlag = 0;
 
 	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
