@@ -118,6 +118,8 @@ private: // メンバ変数
 
 	// プレイヤーレベル
 	float playerLevel = 1;
+	float LevelMax = 3;
+	float LevelMin = 1;
 
 	// プレイヤースピード管理
 	float playerSpeed = 0.0f;

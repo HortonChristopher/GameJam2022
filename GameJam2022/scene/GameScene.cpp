@@ -245,11 +245,15 @@ void GameScene::Update()
 	}
 
 #pragma region プレイヤーレベル管理
-	// 自機レベルアップ
-	if (enemyArray[0]->enemyDefeated) // デバッグのみ
+	// レベルアップ
+	// ↓敵一体を倒したときの処理に差し換えてください↓
+	if (playerLevel < LevelMax)
 	{
-		playerLevel++;
-		enemyArray[0]->enemyDefeated = 0;
+		if (enemyArray[0]->enemyDefeated) // デバッグのみ
+		{
+			playerLevel++;
+			enemyArray[0]->enemyDefeated = 0;
+		}
 	}
 
 	// レベル1
@@ -268,31 +272,29 @@ void GameScene::Update()
 	else if (playerLevel == 3)
 	{
 		playerSpeed = playerSpeedLevel3;
-		playerBulletType = normalBullet;
-	}
-	// レベル4
-	else if (playerLevel == 4)
-	{
-		playerSpeed = playerSpeedLevel3;
 		playerBulletType = spreadBullet;
 	}
 
 	// レベルダウン
-	/*if ()
+	if (playerLevel > LevelMin)
 	{
-
-	}*/
+		for (int i = 0; i < 4; i++)
+		{
+			playerLevel -= enemyArray[i]->levelDown;
+		}
+	}
 #pragma endregion
 
 #pragma region プレイヤーボム管理
 	if (bombFlag == 0)
 	{
 		// 敵を倒すとゲージが増える
-		/*if (enemyArray[0]->enemyDefeated)
+		// ↓敵一体を倒したときの処理に差し換えてください↓
+		if (enemyArray[0]->enemyDefeated)
 		{
 			playerBombGage++;
 			enemyArray[0]->enemyDefeated = 0;
-		}*/
+		}
 
 		// ゲージがマックスの時、ボムフラグをオンにする
 		if (playerBombGage == BombGageMax)
@@ -346,7 +348,6 @@ void GameScene::Update()
 	for (int i = 0; i < 4; i++)
 	{
 		playerLife -= enemyArray[i]->damage;
-		playerLevel -= enemyArray[i]->levelDown;
 	}
 
 	if (playerLife < 0)
@@ -480,17 +481,17 @@ void GameScene::Draw()
 	objTurret->Draw();
 	objLife->Draw();
 
-	
-		//Bullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
-		//Bullet->Draw();
-	
-	//弾描画
+
+	//Bullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+	//Bullet->Draw();
+
+//弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
 		bullet->Draw();
 	}
 
-	
+
 
 	objRareEnemy->Draw();
 
