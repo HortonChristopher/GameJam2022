@@ -100,8 +100,6 @@ private: // メンバ変数
 	bool direction = false;
 	bool speedBoost = false;
 
-	//Model* enemyModel = nullptr;
-
 	float playerSpeed = 0.0f;
 	float playerSpeedLevel1 = 1.0;
 	float playerSpeedLevel2 = 2.0;
