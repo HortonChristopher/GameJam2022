@@ -44,6 +44,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	// Camera set
 	Object3d::SetCamera(camera);
 	Enemy::SetCamera(camera);
+	RareEnemy::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
@@ -70,6 +71,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objGround = Object3d::Create();
 	objTurret = Object3d::Create();
 	objLife = Object3d::Create();
+	objRareEnemy = RareEnemy::Create(nullptr, dxCommon);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -85,11 +87,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objGround->SetModel(modelGround);
 	objTurret->SetModel(modelTurret);
 	objLife->SetModel(modelLife);
+	objRareEnemy->SetModel(modelLife);
 
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objTurret->SetPosition({ 0.0f, 10.0f, 0.0f });
-	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
+	objLife->SetPosition({ 0.0f, 10.0f, 0.0f });
 
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
@@ -110,7 +113,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 void GameScene::Update()
 {
-	if (input->TriggerKey(DIK_SPACE))
+	if (input->TriggerKey(DIK_SPACE)) // 撃つとプレーヤーの動く逆になる
 	{
 		if (direction == true)
 		{
@@ -122,7 +125,7 @@ void GameScene::Update()
 		}
 	}
 
-	if (input->PushKey(DIK_LSHIFT))
+	if (input->PushKey(DIK_LSHIFT)) // スピードブースト
 	{
 		speedBoost = true;
 	}
@@ -131,7 +134,7 @@ void GameScene::Update()
 		speedBoost = false;
 	}
 
-	if (direction)
+	if (direction) // プレイヤーが回転する方向を制御するブール値
 	{
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
@@ -143,7 +146,7 @@ void GameScene::Update()
 			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + 2.0f, 0.0f });
 		}
 	}
-	else
+	else // 逆の方向
 	{
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
@@ -158,12 +161,12 @@ void GameScene::Update()
 
 	if (enemyArray[0]->enemyDefeated > 4) // デバッグのみ
 	{
-		playerSpeedLevel++;
+		playerSpeedLevel += 0.1f;
 		enemyArray[0]->enemyDefeated = 0;
 	}
 
 	// パーティクル生成
-	if (input->TriggerKey(DIK_RETURN))
+	if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
 	{
 		for (int i = 0; i < 4; i++)
 		{
@@ -171,14 +174,14 @@ void GameScene::Update()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) // 敵がライフに命中するとパーティクルを作成します
 	{
 		if (enemyArray[i]->destruction)
 		{
 			CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
 		}
 	}
-	
+
 	objTurret->Update();
 	objLife->Update();
 
@@ -195,6 +198,8 @@ void GameScene::Update()
 
 	objSkydome->Update();
 	objGround->Update();
+
+	objRareEnemy->Update();
 
 	//Debug Start
 	//char msgbuf[256];
@@ -234,12 +239,15 @@ void GameScene::Draw()
 #pragma region 3D描画
 	Object3d::PreDraw(cmdList);
 	Enemy::PreDraw(cmdList);
+	RareEnemy::PreDraw(cmdList);
 
 	// 3D Object Drawing
 	//objSkydome->Draw();
 	//objGround->Draw();
 	objTurret->Draw();
 	objLife->Draw();
+
+	objRareEnemy->Draw();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -251,6 +259,7 @@ void GameScene::Draw()
 
 	Object3d::PostDraw();
 	Enemy::PostDraw();
+	RareEnemy::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画

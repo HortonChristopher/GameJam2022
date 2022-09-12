@@ -78,6 +78,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 
 	Enemy::StaticInitialize(dxCommon->GetDevice());
 
+	RareEnemy::StaticInitialize(dxCommon->GetDevice());
+
 	// FBX
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 #pragma endregion

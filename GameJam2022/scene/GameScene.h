@@ -13,6 +13,7 @@
 #include "FBXGeneration.h"
 #include "Object3D.h"
 #include "Enemy.h"
+#include "RareEnemy.h"
 
 #include <vector>
 #include <array>
@@ -87,6 +88,8 @@ private: // メンバ変数
 
 	Object3d* objTurret = nullptr;
 	Object3d* objLife = nullptr;
+
+	RareEnemy* objRareEnemy = nullptr;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;

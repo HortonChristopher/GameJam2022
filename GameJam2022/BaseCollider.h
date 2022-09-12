@@ -3,6 +3,7 @@
 #include "CollisionTypes.h"
 #include "Object3d.h"
 #include "Enemy.h"
+#include "RareEnemy.h"
 #include "CollisionInfo.h"
 
 /// <summary>
@@ -22,6 +23,10 @@ public:
 
 	inline void SetObjectEnemy(Enemy* object) {
 		this->enemy = object;
+	}
+
+	inline void SetObjectRareEnemy(RareEnemy* object) {
+		this->rareEnemy = object;
 	}
 
 	inline Object3d* GetObject3d() {
@@ -62,6 +67,7 @@ public:
 protected:
 	Object3d* object3d = nullptr;
 	Enemy* enemy = nullptr;
+	RareEnemy* rareEnemy = nullptr;
 	// 形状タイプ Shape type
 	CollisionShapeType shapeType = SHAPE_UNKNOWN;
 
