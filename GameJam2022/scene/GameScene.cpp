@@ -62,8 +62,50 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		return;
 	}
 
+	if (!Sprite::LoadTexture(4, L"Resources/PlayerLife/LifeOverlay.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(5, L"Resources/PlayerLife/L1.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(6, L"Resources/PlayerLife/L2.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(7, L"Resources/PlayerLife/L3.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(8, L"Resources/PlayerLife/L4.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(9, L"Resources/PlayerLife/L5.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(10, L"Resources/PlayerLife/L6.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(11, L"Resources/PlayerLife/L7.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(12, L"Resources/PlayerLife/L8.png")) {
+		assert(0);
+		return;
+	}
+
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+
+	for (int i = 0; i < 9; i++)
+	{
+		lifeGauge[i] = Sprite::Create((i + 4), { 20.0f, 20.0f });
+	}
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
 
@@ -209,6 +251,23 @@ void GameScene::Update()
 		}
 	}
 
+	if (input->TriggerKey(DIK_R))
+	{
+		playerLife--;
+	}
+	else if (input->TriggerKey(DIK_T))
+	{
+		playerLife++;
+	}
+	if (playerLife < 0)
+	{
+		playerLife = 0;
+	}
+	if (playerLife > 8)
+	{
+		playerLife = 8;
+	}
+
 	objTurret->Update();
 	objLife->Update();
 
@@ -312,6 +371,10 @@ void GameScene::Draw()
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	for (int i = 0; i < playerLife + 1; i++)
+	{
+		lifeGauge[i]->Draw();
+	}
 
 	// デバッグテキストの描画
 	debugText->DrawAll(cmdList);

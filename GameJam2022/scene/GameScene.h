@@ -106,7 +106,10 @@ private: // メンバ変数
 	float playerSpeedLevel3 = 3.0;
 	float playerLevel = 1;
 
+	int playerLife = 8;
+
 	std::array<Enemy*, 4> enemyArray{ {} };
+	std::array<Sprite*, 9> lifeGauge{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
 
 	std::array<float, 4> x{ {0.0f, 0.0f, 0.0f, 0.0f} };
