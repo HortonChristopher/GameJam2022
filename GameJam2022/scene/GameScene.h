@@ -12,9 +12,12 @@
 #include "LightGroup.h"
 #include "FBXGeneration.h"
 #include "Object3D.h"
+#include "PlayerBullet.h"
 
 #include <vector>
 #include <array>
+
+class PlayerBullet;
 
 /// <summary>
 /// ゲームシーン
@@ -63,6 +66,10 @@ public: // メンバ関数
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
+
+	//弾発射用関数
+	void Attack();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -84,16 +91,24 @@ private: // メンバ変数
 	Object3d* objTurret = nullptr;
 	Object3d* objLife = nullptr;
 
+	PlayerBullet* Bullet = nullptr;
+	PlayerBullet* bullet_ = nullptr;
+
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	
 	Model* modelTurret = nullptr;
 	Model* modelLife = nullptr;
+	Model* Bullet_Model = nullptr;
 
 	bool direction = false;
 	bool speedBoost = false;
 
 	Model* enemyModel = nullptr;
+
+	//座標(Position)
+	XMFLOAT3 TurretPos = { 0.0f, 0.0f, 0.0f };
+
 	std::array<Object3d*, 4> enemyArray{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
 

@@ -78,6 +78,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 
 	Object3d::StaticInitialize(dxCommon->GetDevice());
 
+	PlayerBullet::StaticInitialize(dxCommon->GetDevice());
+
 	// FBX
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 #pragma endregion

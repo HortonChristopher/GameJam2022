@@ -42,6 +42,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	// Camera set
 	Object3d::SetCamera(camera);
+	PlayerBullet::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
@@ -70,6 +71,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objTurret = Object3d::Create();
 	objLife = Object3d::Create();
 
+
 	for (int i = 0; i < 4; i++)
 	{
 		enemyArray[i] = Object3d::Create();
@@ -80,11 +82,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	modelTurret = Model::CreateFromOBJ("chr_sword");
 	modelLife = Model::CreateFromOBJ("sphere");
 	enemyModel = Model::CreateFromOBJ("box1x1x1");
+	Bullet_Model = Model::CreateFromOBJ("bullet2");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objTurret->SetModel(modelTurret);
 	objLife->SetModel(modelLife);
+
+	
+	Bullet = PlayerBullet::Create(Bullet_Model, TurretPos);
+	/*Bullet->SetModel(Bullet_Model);*/
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -93,8 +100,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
-	objTurret->SetPosition({ 0.0f, 10.0f, 0.0f });
+	objTurret->SetPosition(TurretPos);
 	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
+
+	//Bullet->SetPosition(TurretPos);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -130,6 +139,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
 	objLife->SetScale({ 3.0f, 3.0f, 3.0f });
+
+	Bullet->SetScale({ 3.0f, 3.0f, 3.0f });
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -256,6 +267,7 @@ void GameScene::Update()
 	objTurret->Update();
 	objLife->Update();
 
+
 	for (int i = 0; i < 4; i++)
 	{
 		enemyArray[i]->Update();
@@ -268,6 +280,17 @@ void GameScene::Update()
 
 	objSkydome->Update();
 	objGround->Update();
+
+	//Playerbullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+	//Playerbullet->Update();
+
+	Attack();
+
+	if (bullet_)
+	{
+		bullet_->Update();
+	}
+
 
 	//Debug Start
 	//char msgbuf[256];
@@ -306,12 +329,24 @@ void GameScene::Draw()
 
 #pragma region 3D描画
 	Object3d::PreDraw(cmdList);
+	PlayerBullet::PreDraw(cmdList);
 
 	// 3D Object Drawing
 	//objSkydome->Draw();
 	//objGround->Draw();
 	objTurret->Draw();
 	objLife->Draw();
+
+	
+		//Bullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+		//Bullet->Draw();
+	
+	if (bullet_)
+	{
+		bullet_->Draw();
+	}
+
+	
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -321,6 +356,7 @@ void GameScene::Draw()
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
 
+	PlayerBullet::PostDraw();
 	Object3d::PostDraw();
 #pragma endregion
 
@@ -357,3 +393,16 @@ int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float re
 
 	return (cornerDistance_sq <= (circleR * circleR));
 }
+
+void GameScene::Attack()
+{
+	if (input->TriggerKey(DIK_A))
+	{
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Create(Bullet_Model, TurretPos);
+
+		bullet_ = newBullet;
+	}
+}
+
+
