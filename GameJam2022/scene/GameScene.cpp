@@ -549,7 +549,7 @@ void GameScene::CreateParticles(float x, float z)
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 
 		// 追加
-		particleMan->Add(120, pos, vel, acc, 1.0f, 0.0f);
+		particleMan->Add(120, pos, vel, acc, 3.0f, 0.0f);
 	}
 }
 

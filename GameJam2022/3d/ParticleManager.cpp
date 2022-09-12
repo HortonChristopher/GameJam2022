@@ -324,11 +324,18 @@ void ParticleManager::InitializeGraphicsPipeline()
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;
+
+	//半透明合成
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;                           //加算
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;                       //ソースのアルファ値
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;                  //1.0f-ソースのアルファ値
+
 	// 加算ブレンディング
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	blenddesc.SrcBlend = D3D12_BLEND_ONE;
-	blenddesc.DestBlend = D3D12_BLEND_ONE;
-	//// 減算ブレンディング
+	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
+	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
+	//blenddesc.DestBlend = D3D12_BLEND_ONE;
+	
+	// 減算ブレンディング
 	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
 	//blenddesc.DestBlend = D3D12_BLEND_ONE;
