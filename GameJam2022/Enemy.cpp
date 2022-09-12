@@ -329,6 +329,7 @@ void Enemy::Update()
 	}
 
 	damage = 0;
+	levelDown = 0;
 	
 	SetPosition({ position.x + x, 10.0f, position.z + z });
 
@@ -355,6 +356,7 @@ void Enemy::Update()
 		else if (timer > timeToTarget)
 		{
 			damage++;
+			levelDown++;
 		}
 
 		RNG = rand() % 4;

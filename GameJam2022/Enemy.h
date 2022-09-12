@@ -206,5 +206,6 @@ public:
 	XMFLOAT3 particlePosition = { 0.0f, 10.0f, 0.0f };
 	int enemyDefeated = 0; // デバッグのみ
 	int damage = 0;
+	int levelDown = 0;
 };
 

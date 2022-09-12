@@ -203,11 +203,11 @@ void GameScene::Update()
 
 #pragma region プレイヤーレベル管理
 	// 自機レベルアップ
-	//if (enemyArray[0]->enemyDefeated) // デバッグのみ
-	//{
-	//	playerLevel++;
-	//	enemyArray[0]->enemyDefeated = 0;
-	//}
+	if (enemyArray[0]->enemyDefeated) // デバッグのみ
+	{
+		playerLevel++;
+		enemyArray[0]->enemyDefeated = 0;
+	}
 
 	// レベル1
 	if (playerLevel == 1)
@@ -245,11 +245,11 @@ void GameScene::Update()
 	if (bombFlag == 0)
 	{
 		// 敵を倒すとゲージが増える
-		if (enemyArray[0]->enemyDefeated)
+		/*if (enemyArray[0]->enemyDefeated)
 		{
 			playerBombGage++;
 			enemyArray[0]->enemyDefeated = 0;
-		}
+		}*/
 
 		// ゲージがマックスの時、ボムフラグをオンにする
 		if (playerBombGage == BombGageMax)
@@ -303,6 +303,7 @@ void GameScene::Update()
 	for (int i = 0; i < 4; i++)
 	{
 		playerLife -= enemyArray[i]->damage;
+		playerLevel -= enemyArray[i]->levelDown;
 	}
 
 	if (playerLife < 0)
