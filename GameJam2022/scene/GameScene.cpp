@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "FBXGeneration.h"
 #include "FbxLoader/FbxLoader.h"
+#include "PlayerBullet.h"
 
 #include <cassert>
 #include <sstream>
@@ -42,7 +43,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	FBXGeneration::SetDevice(dxCommon->GetDevice());
 	// Camera set
 	Object3d::SetCamera(camera);
-	PlayerBullet::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
@@ -89,10 +89,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objTurret->SetModel(modelTurret);
 	objLife->SetModel(modelLife);
 
-	
-	Bullet = PlayerBullet::Create(Bullet_Model, TurretPos);
-	/*Bullet->SetModel(Bullet_Model);*/
-
 	for (int i = 0; i < 4; i++)
 	{
 		enemyArray[i]->SetModel(enemyModel);
@@ -103,7 +99,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objTurret->SetPosition(TurretPos);
 	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
 
-	//Bullet->SetPosition(TurretPos);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -140,7 +135,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio * audio)
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
 	objLife->SetScale({ 3.0f, 3.0f, 3.0f });
 
-	Bullet->SetScale({ 3.0f, 3.0f, 3.0f });
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -286,9 +280,10 @@ void GameScene::Update()
 
 	Attack();
 
-	if (bullet_)
+	//弾更新
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
-		bullet_->Update();
+		bullet->Update();
 	}
 
 
@@ -341,9 +336,10 @@ void GameScene::Draw()
 		//Bullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
 		//Bullet->Draw();
 	
-	if (bullet_)
+	//弾描画
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
-		bullet_->Draw();
+		bullet->Draw();
 	}
 
 	
@@ -396,12 +392,17 @@ int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float re
 
 void GameScene::Attack()
 {
-	if (input->TriggerKey(DIK_A))
+	if (input->TriggerKey(DIK_SPACE))
 	{
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Create(Bullet_Model, TurretPos);
+		/// <summary>
+		/// 弾生成と初期化
+		/// </summary>
+		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });;/*new PlayerBullet();*/
+		//newBullet->PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+		//newBullet->PlayerBullet::Create(Bullet_Model,camera, TurretPos);
 
-		bullet_ = newBullet;
+		//弾を登録
+		bullets_.push_back(std::move(newBullet));
 	}
 }
 

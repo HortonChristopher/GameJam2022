@@ -63,7 +63,7 @@ public: // 静的メンバ関数 Static member function
 	static void PostDraw();
 
 	// 3Dオブジェクト生成 3D object generation
-	static PlayerBullet* Create(Model* model, XMFLOAT3 pos);
+	static std::unique_ptr<PlayerBullet>Create(Model* model,Camera* camera, XMFLOAT3 pos);
 
 
 private: // 静的メンバ変数 Static member variables

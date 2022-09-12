@@ -205,7 +205,7 @@ void PlayerBullet::PostDraw()
 	PlayerBullet::cmdList = nullptr;
 }
 
-PlayerBullet* PlayerBullet::Create(Model* model, XMFLOAT3 pos)
+std::unique_ptr<PlayerBullet> PlayerBullet::Create(Model* model, Camera* camera, XMFLOAT3 pos)
 {
 	// 3Dオブジェクトのインスタンスを生成 Instantiate a 3D object
 	PlayerBullet* playerBullet = new PlayerBullet();
@@ -224,10 +224,16 @@ PlayerBullet* PlayerBullet::Create(Model* model, XMFLOAT3 pos)
 
 	}
 
+	//カメラのセット
+	if (camera)
+	{
+		playerBullet->SetCamera(camera);
+	}
+
 	//float scale_val = 20;
 	//object3d->scale = { scale_val,scale_val,scale_val };
 
-	return playerBullet;
+	return std::unique_ptr<PlayerBullet>(playerBullet);
 }
 
 PlayerBullet::~PlayerBullet()

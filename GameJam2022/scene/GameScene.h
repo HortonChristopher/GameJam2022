@@ -16,6 +16,8 @@
 
 #include <vector>
 #include <array>
+#include <memory>
+#include <list>
 
 class PlayerBullet;
 
@@ -91,8 +93,9 @@ private: // メンバ変数
 	Object3d* objTurret = nullptr;
 	Object3d* objLife = nullptr;
 
-	PlayerBullet* Bullet = nullptr;
-	PlayerBullet* bullet_ = nullptr;
+	
+
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
