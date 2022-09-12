@@ -203,36 +203,76 @@ void GameScene::Update()
 
 #pragma region プレイヤーレベル管理
 	// 自機レベルアップ
-	if (enemyArray[0]->enemyDefeated > 4) // デバッグのみ
-	{
-		playerLevel++;
-		enemyArray[0]->enemyDefeated = 0;
-	}
+	//if (enemyArray[0]->enemyDefeated) // デバッグのみ
+	//{
+	//	playerLevel++;
+	//	enemyArray[0]->enemyDefeated = 0;
+	//}
 
 	// レベル1
 	if (playerLevel == 1)
 	{
 		playerSpeed = playerSpeedLevel1;
+		playerBulletType = normalBullet;
 	}
 	// レベル2
 	else if (playerLevel == 2)
 	{
 		playerSpeed = playerSpeedLevel2;
+		playerBulletType = normalBullet;
 	}
 	// レベル3
 	else if (playerLevel == 3)
 	{
 		playerSpeed = playerSpeedLevel3;
+		playerBulletType = normalBullet;
 	}
-#pragma endregion
-
-	// 自機強化(拡散弾)
+	// レベル4
+	else if (playerLevel == 4)
+	{
+		playerSpeed = playerSpeedLevel3;
+		playerBulletType = spreadBullet;
+	}
 
 	// レベルダウン
 	/*if ()
 	{
 
 	}*/
+#pragma endregion
+
+#pragma region プレイヤーボム管理
+	if (bombFlag == 0)
+	{
+		// 敵を倒すとゲージが増える
+		if (enemyArray[0]->enemyDefeated)
+		{
+			playerBombGage++;
+			enemyArray[0]->enemyDefeated = 0;
+		}
+
+		// ゲージがマックスの時、ボムフラグをオンにする
+		if (playerBombGage == BombGageMax)
+		{
+			bombFlag = 1;
+		}
+	}
+
+	// ボムフラグがオンの時、ボムを発射
+	else if (bombFlag == 1)
+	{
+		if (input->TriggerKey(DIK_B))
+		{
+			//
+			// ボムを使用
+			//
+
+			bombFlag = 0;
+			playerBombGage = 0;
+			enemyArray[0]->enemyDefeated = 0;
+		}
+	}
+#pragma endregion
 
 	// パーティクル生成
 	if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
@@ -268,6 +308,7 @@ void GameScene::Update()
 		playerLife = 8;
 	}
 
+#pragma region アップデート
 	objTurret->Update();
 	objLife->Update();
 
@@ -284,6 +325,8 @@ void GameScene::Update()
 
 	objSkydome->Update();
 	objGround->Update();
+	objRareEnemy->Update();
+#pragma endregion
 
 #pragma region デバックテキスト
 	// プレイヤーのレベルを表示
@@ -299,9 +342,28 @@ void GameScene::Update()
 		<< std::fixed << std::setprecision(1)
 		<< playerSpeed << ")";
 	debugText->Print(PlayerSpeed.str(), 50, 110, 1.0f);
-#pragma endregion
 
-	objRareEnemy->Update();
+	// プレイヤーの弾種を表示
+	/*std::ostringstream PlayerBulletType;
+	PlayerBulletType << "PlayerBulletType:("
+		<< std::fixed << std::setprecision(1)
+		<< playerBulletType << ")";
+	debugText->Print(PlayerBulletType.str(), 50, 130, 1.0f);*/
+
+	// プレイヤーの速度を表示
+	std::ostringstream PlayerBombGage;
+	PlayerBombGage << "PlayerBombGage:("
+		<< std::fixed << std::setprecision(0)
+		<< playerBombGage << ")";
+	debugText->Print(PlayerBombGage.str(), 50, 130, 1.0f);
+
+	// プレイヤーの速度を表示
+	std::ostringstream BombFlag;
+	BombFlag << "BombFlag:("
+		<< std::fixed << std::setprecision(0)
+		<< bombFlag << ")";
+	debugText->Print(BombFlag.str(), 50, 150, 1.0f);
+#pragma endregion
 
 	//Debug Start
 	/*char msgbuf[256];
