@@ -70,6 +70,7 @@ public: // メンバ関数
 
 	// パーティクル生成
 	void CreateParticles(float x, float z);
+	void CreateBombParticles(float x, float z);
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
