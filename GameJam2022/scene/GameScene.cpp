@@ -9,8 +9,6 @@
 #include <time.h>
 #include "camera.h"
 
-//あ
-
 using namespace DirectX;
 
 GameScene::GameScene()
