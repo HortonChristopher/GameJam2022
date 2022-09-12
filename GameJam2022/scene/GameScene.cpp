@@ -104,7 +104,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	for (int i = 0; i < 9; i++)
 	{
-		lifeGauge[i] = Sprite::Create((i + 4), { 20.0f, 20.0f });
+		lifeGauge[i] = Sprite::Create((i + 4), { 1139.0f, 20.0f });
 	}
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
@@ -299,6 +299,12 @@ void GameScene::Update()
 	{
 		playerLife++;
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		playerLife -= enemyArray[i]->damage;
+	}
+
 	if (playerLife < 0)
 	{
 		playerLife = 0;
@@ -363,6 +369,12 @@ void GameScene::Update()
 		<< std::fixed << std::setprecision(0)
 		<< bombFlag << ")";
 	debugText->Print(BombFlag.str(), 50, 150, 1.0f);
+
+	std::ostringstream playerLifeNumber;
+	playerLifeNumber
+		<< std::fixed << std::setprecision(0)
+		<< playerLife;
+	debugText->Print(playerLifeNumber.str(), 1179.0f, 39.0f, 5.0f);
 #pragma endregion
 
 	//Debug Start

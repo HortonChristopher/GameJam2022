@@ -327,24 +327,35 @@ void Enemy::Update()
 		//float degrees = XMConvertToDegrees(radians);
 		movementFlag = true;
 	}
+
+	damage = 0;
 	
 	SetPosition({ position.x + x, 10.0f, position.z + z });
 
 	timer++;
 
-	if (input->TriggerKey(DIK_RETURN))
-	{
-		//CreateParticles(position.x, position.z);
-		destruction = true;
-		timer = timeToTarget + 1;
-		enemyDefeated++; //デバッグのみ
-	}
+	//if (input->TriggerKey(DIK_RETURN))
+	//{
+	//	//CreateParticles(position.x, position.z);
+	//	destruction = true;
+	//	timer = timeToTarget + 1;
+	//	enemyDefeated++; //デバッグのみ
+	//}
 
-	if (timer > timeToTarget)
+	if (timer > timeToTarget || input->TriggerKey(DIK_RETURN))
 	{
 		//CreateParticles(position.x, position.z);
 		destruction = true;
 		particlePosition = position;
+
+		if (input->TriggerKey(DIK_RETURN))
+		{
+			enemyDefeated++;
+		}
+		else if (timer > timeToTarget)
+		{
+			damage++;
+		}
 
 		RNG = rand() % 4;
 
