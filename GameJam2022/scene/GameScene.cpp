@@ -136,7 +136,7 @@ void GameScene::Update()
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
 		{
-			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + playerSpeedLevel, 0.0f }); // playerSpeedLevel = スピード
+			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + playerSpeed, 0.0f }); // playerSpeedLevel = スピード
 		}
 		else
 		{
@@ -148,7 +148,7 @@ void GameScene::Update()
 		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
 		if (!speedBoost)
 		{
-			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - playerSpeedLevel, 0.0f }); // playerSpeedLevel = スピード
+			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - playerSpeed, 0.0f }); // playerSpeedLevel = スピード
 		}
 		else
 		{
@@ -156,11 +156,38 @@ void GameScene::Update()
 		}
 	}
 
+#pragma region プレイヤーレベル管理
+	// 自機レベルアップ
 	if (enemyArray[0]->enemyDefeated > 4) // デバッグのみ
 	{
-		playerSpeedLevel++;
+		playerLevel++;
 		enemyArray[0]->enemyDefeated = 0;
 	}
+
+	// レベル1
+	if (playerLevel == 1)
+	{
+		playerSpeed = playerSpeedLevel1;
+	}
+	// レベル2
+	else if (playerLevel == 2)
+	{
+		playerSpeed = playerSpeedLevel2;
+	}
+	// レベル3
+	else if (playerLevel == 3)
+	{
+		playerSpeed = playerSpeedLevel3;
+	}
+#pragma endregion
+
+	// 自機強化(拡散弾)
+
+	// レベルダウン
+	/*if ()
+	{
+
+	}*/
 
 	// パーティクル生成
 	if (input->TriggerKey(DIK_RETURN))
@@ -196,17 +223,33 @@ void GameScene::Update()
 	objSkydome->Update();
 	objGround->Update();
 
-	//Debug Start
-	//char msgbuf[256];
-	//char msgbuf2[256];
-	//char msgbuf3[256];
+#pragma region デバックテキスト
+	// プレイヤーのレベルを表示
+	std::ostringstream PlayerLevel;
+	PlayerLevel << "PlayerLevel:("
+		<< std::fixed << std::setprecision(0)
+		<< playerLevel << ")";
+	debugText->Print(PlayerLevel.str(), 50, 90, 1.0f);
 
-	//sprintf_s(msgbuf, 256, "X: %f\n", objTurret->GetPosition().x);
-	//sprintf_s(msgbuf2, 256, "Y: %f\n", objTurret->GetPosition().y);
-	//sprintf_s(msgbuf3, 256, "Z: %f\n", objTurret->GetPosition().z);
-	//OutputDebugStringA(msgbuf);
-	//OutputDebugStringA(msgbuf2);
-	//OutputDebugStringA(msgbuf3);
+	// プレイヤーの速度を表示
+	std::ostringstream PlayerSpeed;
+	PlayerSpeed << "PlayerSpeed:("
+		<< std::fixed << std::setprecision(1)
+		<< playerSpeed << ")";
+	debugText->Print(PlayerSpeed.str(), 50, 110, 1.0f);
+#pragma endregion
+
+	//Debug Start
+	/*char msgbuf[256];
+	char msgbuf2[256];
+	char msgbuf3[256];
+
+	sprintf_s(msgbuf, 256, "X: %f\n", objTurret->GetPosition().x);
+	sprintf_s(msgbuf2, 256, "Y: %f\n", objTurret->GetPosition().y);
+	sprintf_s(msgbuf3, 256, "Z: %f\n", objTurret->GetPosition().z);
+	OutputDebugStringA(msgbuf);
+	OutputDebugStringA(msgbuf2);
+	OutputDebugStringA(msgbuf3);*/
 	//Debug End
 }
 

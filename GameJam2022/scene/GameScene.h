@@ -99,7 +99,11 @@ private: // メンバ変数
 
 	//Model* enemyModel = nullptr;
 
-	float playerSpeedLevel = 1.0f;
+	float playerSpeed = 0.0f;
+	float playerSpeedLevel1 = 1.0;
+	float playerSpeedLevel2 = 2.0;
+	float playerSpeedLevel3 = 3.0;
+	float playerLevel = 1;
 
 	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
