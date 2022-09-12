@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "FBXGeneration.h"
 #include "FbxLoader/FbxLoader.h"
+#include "PlayerBullet.h"
 
 #include <cassert>
 #include <sstream>
@@ -115,6 +116,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objLife = Object3d::Create();
 	objRareEnemy = RareEnemy::Create(nullptr, dxCommon);
 
+
 	for (int i = 0; i < 4; i++)
 	{
 		enemyArray[i] = Enemy::Create(nullptr, dxCommon);
@@ -124,6 +126,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	modelGround = Model::CreateFromOBJ("ground");
 	modelTurret = Model::CreateFromOBJ("chr_sword");
 	modelLife = Model::CreateFromOBJ("sphere");
+	enemyModel = Model::CreateFromOBJ("box1x1x1");
+	Bullet_Model = Model::CreateFromOBJ("bullet2");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
@@ -133,13 +137,52 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
-	objTurret->SetPosition({ 0.0f, 10.0f, 0.0f });
-	objLife->SetPosition({ 0.0f, 10.0f, 0.0f });
+	objTurret->SetPosition(TurretPos);
+	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		int RNG = rand() % 1;
+		int RNG2 = rand() % 1;
+		if (RNG == 1)
+		{
+			if (RNG2 == 1)
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+			else
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+		}
+		else
+		{
+			if (RNG2 == 1)
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+			else
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 + 50.0f });
+			}
+		}
+	}
+
+	//objTurret->SetPosition({ (objTurret->GetPosition().x - (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)), 10.0f, (objTurret->GetPosition().z + (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 0.5f)) });
 
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
 	objLife->SetScale({ 3.0f, 3.0f, 3.0f });
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		enemyArray[i]->SetScale({ 5.0f, 5.0f, 5.0f });
+	}
+
+	//objTurret->SetRotation({ 0.0f, 180.0f, 0.0f });
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/tex1.png");
@@ -378,6 +421,18 @@ void GameScene::Update()
 	debugText->Print(playerLifeNumber.str(), 1179.0f, 39.0f, 5.0f);
 #pragma endregion
 
+	//Playerbullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+	//Playerbullet->Update();
+
+	Attack();
+
+	//弾更新
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	{
+		bullet->Update();
+	}
+
+
 	//Debug Start
 	/*char msgbuf[256];
 	char msgbuf2[256];
@@ -417,12 +472,25 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 	Enemy::PreDraw(cmdList);
 	RareEnemy::PreDraw(cmdList);
+	PlayerBullet::PreDraw(cmdList);
 
 	// 3D Object Drawing
 	//objSkydome->Draw();
 	//objGround->Draw();
 	objTurret->Draw();
 	objLife->Draw();
+
+	
+		//Bullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+		//Bullet->Draw();
+	
+	//弾描画
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	{
+		bullet->Draw();
+	}
+
+	
 
 	objRareEnemy->Draw();
 
@@ -434,6 +502,7 @@ void GameScene::Draw()
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
 
+	PlayerBullet::PostDraw();
 	Object3d::PostDraw();
 	Enemy::PostDraw();
 	RareEnemy::PostDraw();
@@ -501,3 +570,21 @@ int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float re
 
 	return (cornerDistance_sq <= (circleR * circleR));
 }
+
+void GameScene::Attack()
+{
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		/// <summary>
+		/// 弾生成と初期化
+		/// </summary>
+		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });;/*new PlayerBullet();*/
+		//newBullet->PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
+		//newBullet->PlayerBullet::Create(Bullet_Model,camera, TurretPos);
+
+		//弾を登録
+		bullets_.push_back(std::move(newBullet));
+	}
+}
+
+

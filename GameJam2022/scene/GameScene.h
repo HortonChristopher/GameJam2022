@@ -14,9 +14,14 @@
 #include "Object3D.h"
 #include "Enemy.h"
 #include "RareEnemy.h"
+#include "PlayerBullet.h"
 
 #include <vector>
 #include <array>
+#include <memory>
+#include <list>
+
+class PlayerBullet;
 
 /// <summary>
 /// ゲームシーン
@@ -68,6 +73,10 @@ public: // メンバ関数
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
 
+
+	//弾発射用関数
+	void Attack();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -91,11 +100,16 @@ private: // メンバ変数
 
 	RareEnemy* objRareEnemy = nullptr;
 
+	
+
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	
 	Model* modelTurret = nullptr;
 	Model* modelLife = nullptr;
+	Model* Bullet_Model = nullptr;
 
 	bool direction = false;
 	bool speedBoost = false;
@@ -125,6 +139,10 @@ private: // メンバ変数
 
 	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<Sprite*, 9> lifeGauge{ {} };
+	Model* enemyModel = nullptr;
+
+	//座標(Position)
+	XMFLOAT3 TurretPos = { 0.0f, 0.0f, 0.0f };
 	std::array<bool, 4> enemyBool{ {false, false, false, false} };
 
 	std::array<float, 4> x{ {0.0f, 0.0f, 0.0f, 0.0f} };
