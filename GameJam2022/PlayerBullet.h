@@ -187,8 +187,13 @@ protected: // メンバ変数 Member variables
 	// ビルボード Billboard
 	bool isBillboard = false;
 
+	float velocityVx = 0.0f;
+	float velocityVy = 0.0f;
+	float velocityVz = 0.0f;
+
+	XMVECTOR velocityV;
+
 	//移動速度
 	//XMMATRIX speed = { 3, 0, 0 };
-
 };
 

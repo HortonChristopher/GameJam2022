@@ -47,6 +47,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	Enemy::SetCamera(camera);
 	RareEnemy::SetCamera(camera);
 	FBXGeneration::SetCamera(camera);
+	PlayerBullet::SetCamera(camera);
 
 	// デバッグテキスト用テクスチャ読み込み
 	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
@@ -490,8 +491,6 @@ void GameScene::Draw()
 		bullet->Draw();
 	}
 
-	
-
 	objRareEnemy->Draw();
 
 	for (int i = 0; i < 4; i++)
@@ -576,16 +575,16 @@ void GameScene::Attack()
 	if (input->TriggerKey(DIK_SPACE))
 	{
 		//弾の速度
-		const float Speed = 3.0f;
-		XMVECTOR velocity = { Speed, 0, 0 };
+		const float Speed = 1.0f;
+		XMVECTOR velocity = { 0, 0, -Speed };
 
 		//速度ベクトルに合わせて回転させる
-		velocity = XMVector4Transform(velocity, objTurret->GetMatWorld());
-		
+		velocity = XMVector3Transform(velocity, objTurret->GetMatWorld());
+
 		/// <summary>
 		/// 弾生成と初期化
 		/// </summary>
-		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);;/*new PlayerBullet();*/
+		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
 		//newBullet->PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
 		//newBullet->PlayerBullet::Create(Bullet_Model,camera, TurretPos);
 

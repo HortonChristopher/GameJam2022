@@ -18,7 +18,7 @@ ID3D12Device* PlayerBullet::device = nullptr;
 ID3D12GraphicsCommandList* PlayerBullet::cmdList = nullptr;
 PlayerBullet::PipelineSet PlayerBullet::pipelineSet;
 Camera* PlayerBullet::camera = nullptr;
-XMVECTOR PlayerBullet::velocity_ = { 0, 0, 0 };
+XMVECTOR PlayerBullet::velocity_;
 
 void PlayerBullet::StaticInitialize(ID3D12Device* device, Camera* camera)
 {
@@ -33,8 +33,6 @@ void PlayerBullet::StaticInitialize(ID3D12Device* device, Camera* camera)
 
 	// モデルの静的初期化 Static initialization of the model
 	Model::StaticInitialize(device);
-
-	
 }
 
 void PlayerBullet::CreateGraphicsPipeline()
@@ -296,8 +294,10 @@ void PlayerBullet::Update()
 	constBuffB0->Unmap(0, nullptr);
 
 	//更新処理
-	position.x += 3.0f;
-	//position += velocity_;
+	//position.x += 3.0f;
+	position.x += velocity_.m128_f32[0] / 20.0f; // 弾丸を速くしたり
+	position.y += velocity_.m128_f32[1] / 20.0f; // 遅くしたい場合は、
+	position.z += velocity_.m128_f32[2] / 20.0f; // 10.0f を変更します。
 
 	// 当たり判定更新 Collision detection update
 	if (collider) {
