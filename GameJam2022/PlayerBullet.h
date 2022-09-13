@@ -23,6 +23,7 @@ private: // エイリアス alias
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 
 public: // サブクラス	 Subclass
 
@@ -63,7 +64,7 @@ public: // 静的メンバ関数 Static member function
 	static void PostDraw();
 
 	// 3Dオブジェクト生成 3D object generation
-	static std::unique_ptr<PlayerBullet>Create(Model* model,Camera* camera, XMFLOAT3 pos);
+	static std::unique_ptr<PlayerBullet>Create(Model* model,Camera* camera, XMFLOAT3 pos, XMFLOAT3 rot, const XMVECTOR& velocity);
 
 
 private: // 静的メンバ変数 Static member variables
@@ -75,6 +76,8 @@ private: // 静的メンバ変数 Static member variables
 	static PipelineSet pipelineSet;
 	// カメラ camera
 	static Camera* camera;
+	//速度
+	static XMVECTOR velocity_;
 
 private:// 静的メンバ関数 Static member function
 
@@ -94,7 +97,7 @@ public: // メンバ関数 Member function
 	/// </summary>
 	/// <returns></returns>
 	//bool Initialize();
-	virtual bool Initialize(XMFLOAT3 pos);
+	virtual bool Initialize(XMFLOAT3 pos, XMFLOAT3 rot);
 
 	// 毎フレーム処理 Every frame processing
 	//void Update();
@@ -183,5 +186,9 @@ protected: // メンバ変数 Member variables
 	Model* model = nullptr;
 	// ビルボード Billboard
 	bool isBillboard = false;
+
+	//移動速度
+	//XMMATRIX speed = { 3, 0, 0 };
+
 };
 

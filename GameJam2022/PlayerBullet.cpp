@@ -18,6 +18,7 @@ ID3D12Device* PlayerBullet::device = nullptr;
 ID3D12GraphicsCommandList* PlayerBullet::cmdList = nullptr;
 PlayerBullet::PipelineSet PlayerBullet::pipelineSet;
 Camera* PlayerBullet::camera = nullptr;
+XMVECTOR PlayerBullet::velocity_ = { 0, 0, 0 };
 
 void PlayerBullet::StaticInitialize(ID3D12Device* device, Camera* camera)
 {
@@ -205,7 +206,7 @@ void PlayerBullet::PostDraw()
 	PlayerBullet::cmdList = nullptr;
 }
 
-std::unique_ptr<PlayerBullet> PlayerBullet::Create(Model* model, Camera* camera, XMFLOAT3 pos)
+std::unique_ptr<PlayerBullet> PlayerBullet::Create(Model* model, Camera* camera, XMFLOAT3 pos, XMFLOAT3 rot, const XMVECTOR& velocity)
 {
 	// 3Dオブジェクトのインスタンスを生成 Instantiate a 3D object
 	PlayerBullet* playerBullet = new PlayerBullet();
@@ -214,7 +215,7 @@ std::unique_ptr<PlayerBullet> PlayerBullet::Create(Model* model, Camera* camera,
 	}
 
 	// 初期化Initialization
-	if (!playerBullet->Initialize(pos)) {
+	if (!playerBullet->Initialize(pos, rot)) {
 		delete playerBullet;
 		assert(0);
 	}
@@ -229,6 +230,8 @@ std::unique_ptr<PlayerBullet> PlayerBullet::Create(Model* model, Camera* camera,
 	{
 		playerBullet->SetCamera(camera);
 	}
+
+	velocity_ = velocity;
 
 	//float scale_val = 20;
 	//object3d->scale = { scale_val,scale_val,scale_val };
@@ -246,14 +249,14 @@ PlayerBullet::~PlayerBullet()
 	}
 }
 
-bool PlayerBullet::Initialize(XMFLOAT3 pos)
+bool PlayerBullet::Initialize(XMFLOAT3 pos, XMFLOAT3 rot)
 {
 	// nullptrチェック nullptr check
 	assert(device);
 
 	position = pos;
 
-	positionE = pos;
+	rotation = rot;
 
 	HRESULT result;
 	// 定数バッファの生成 Generate constant buffer
@@ -294,6 +297,7 @@ void PlayerBullet::Update()
 
 	//更新処理
 	position.x += 3.0f;
+	//position += velocity_;
 
 	// 当たり判定更新 Collision detection update
 	if (collider) {
@@ -404,6 +408,7 @@ void PlayerBullet::UpdateWorldMatrix()
 		//matWorld *= (matTrans * matTrans2);
 		matWorld *= matTrans;
 	}
+
 
 	// 親オブジェクトがあれば If there is a parent object
 	if (parent != nullptr) {

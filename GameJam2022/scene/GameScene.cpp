@@ -575,10 +575,17 @@ void GameScene::Attack()
 {
 	if (input->TriggerKey(DIK_SPACE))
 	{
+		//弾の速度
+		const float Speed = 3.0f;
+		XMVECTOR velocity = { Speed, 0, 0 };
+
+		//速度ベクトルに合わせて回転させる
+		velocity = XMVector4Transform(velocity, objTurret->GetMatWorld());
+		
 		/// <summary>
 		/// 弾生成と初期化
 		/// </summary>
-		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });;/*new PlayerBullet();*/
+		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);;/*new PlayerBullet();*/
 		//newBullet->PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
 		//newBullet->PlayerBullet::Create(Bullet_Model,camera, TurretPos);
 
