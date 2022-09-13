@@ -5,6 +5,8 @@
 #include "Enemy.h"
 #include "RareEnemy.h"
 #include "PlayerBullet.h"
+#include "PlayerBullet_R.h"
+#include "PlayerBullet_L.h"
 #include "CollisionInfo.h"
 
 /// <summary>
@@ -32,6 +34,14 @@ public:
 
 	inline void SetBullet(PlayerBullet* object) {
 		this->playerBullet = object;
+	}
+
+	inline void SetBullet(PlayerBullet_R* object) {
+		this->playerBullet_R = object;
+	}
+
+	inline void SetBullet(PlayerBullet_L* object) {
+		this->playerBullet_L = object;
 	}
 
 	inline Object3d* GetObject3d() {
@@ -78,6 +88,8 @@ protected:
 	Enemy* enemy = nullptr;
 	RareEnemy* rareEnemy = nullptr;
 	PlayerBullet* playerBullet = nullptr;
+	PlayerBullet_R* playerBullet_R = nullptr;
+	PlayerBullet_L* playerBullet_L = nullptr;
 	// 形状タイプ Shape type
 	CollisionShapeType shapeType = SHAPE_UNKNOWN;
 

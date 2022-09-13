@@ -457,11 +457,26 @@ void GameScene::Update()
 
 	Attack();
 
+	//拡散弾
+	DiffusionAttack_R();
+	DiffusionAttack_L();
+
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
 		bullet->Update();
 	}
+
+	for (std::unique_ptr<PlayerBullet_R>& bullet : bullets_R)
+	{
+		bullet->Update();
+	}
+
+	for (std::unique_ptr<PlayerBullet_L>& bullet : bullets_L)
+	{
+		bullet->Update();
+	}
+
 
 
 	//Debug Start
@@ -504,6 +519,8 @@ void GameScene::Draw()
 	Enemy::PreDraw(cmdList);
 	RareEnemy::PreDraw(cmdList);
 	PlayerBullet::PreDraw(cmdList);
+	PlayerBullet_R::PreDraw(cmdList);
+	PlayerBullet_L::PreDraw(cmdList);
 
 	// 3D Object Drawing
 	//objSkydome->Draw();
@@ -521,6 +538,16 @@ void GameScene::Draw()
 		bullet->Draw();
 	}
 
+	for (std::unique_ptr<PlayerBullet_R>& bullet : bullets_R)
+	{
+		bullet->Draw();
+	}
+
+	for (std::unique_ptr<PlayerBullet_L>& bullet : bullets_L)
+	{
+		bullet->Draw();
+	}
+
 	objRareEnemy->Draw();
 
 	for (int i = 0; i < 4; i++)
@@ -531,6 +558,8 @@ void GameScene::Draw()
 	// パーティクルの描画
 	particleMan->Draw(cmdList);
 
+	PlayerBullet_L::PostDraw();
+	PlayerBullet_R::PostDraw();
 	PlayerBullet::PostDraw();
 	Object3d::PostDraw();
 	Enemy::PostDraw();
@@ -661,3 +690,47 @@ void GameScene::Attack()
 		bullets_.push_back(std::move(newBullet));
 	}
 }
+
+void GameScene::DiffusionAttack_R()
+{
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		//弾の速度
+		const float Speed = 3.0f;
+		XMVECTOR velocity = { -Speed, Speed, 0 };
+
+		//速度ベクトルに合わせて回転させる
+		velocity = XMVector3Transform(velocity, objTurret->GetMatWorld());
+
+		/// <summary>
+		/// 弾生成と初期化
+		/// </summary>
+		std::unique_ptr<PlayerBullet_R> newBullet = PlayerBullet_R::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
+
+		//弾を登録
+		bullets_R.push_back(std::move(newBullet));
+	}
+}
+
+void GameScene::DiffusionAttack_L()
+{
+	if (input->TriggerKey(DIK_SPACE))
+	{
+		//弾の速度
+		const float Speed = 3.0f;
+		XMVECTOR velocity = { Speed, Speed, 0 };
+
+		//速度ベクトルに合わせて回転させる
+		velocity = XMVector3Transform(velocity, objTurret->GetMatWorld());
+
+		/// <summary>
+		/// 弾生成と初期化
+		/// </summary>
+		std::unique_ptr<PlayerBullet_L> newBullet = PlayerBullet_L::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
+
+		//弾を登録
+		bullets_L.push_back(std::move(newBullet));
+	}
+}
+
+

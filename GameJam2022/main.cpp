@@ -81,6 +81,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	RareEnemy::StaticInitialize(dxCommon->GetDevice());
 
 	PlayerBullet::StaticInitialize(dxCommon->GetDevice());
+	PlayerBullet_R::StaticInitialize(dxCommon->GetDevice());
+	PlayerBullet_L::StaticInitialize(dxCommon->GetDevice());
 
 	// FBX
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
