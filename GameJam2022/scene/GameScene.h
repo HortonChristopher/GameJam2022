@@ -128,9 +128,11 @@ private: // メンバ変数
 	//Model* enemyModel = nullptr;
 
 	// プレイヤーレベル
-	float playerLevel = 1;
-	float LevelMax = 3;
-	float LevelMin = 1;
+	int playerLevel = 1;
+	int LevelMax = 3;
+	int LevelMin = 1;
+
+	int playerScoreValue = 0;
 
 	// プレイヤースピード管理
 	float playerSpeed = 0.0f;
@@ -144,8 +146,9 @@ private: // メンバ変数
 	bool spreadBullet;
 
 	// プレイヤーボム
-	float playerBombGage = 0;
-	float BombGageMax = 20;
+	int playerBombGage = 0;
+	float BombGageMax = 30;
+	float BombGageHalf = 0;
 	bool bombFlag = 0;
 
 	int playerLife = 8;
@@ -153,6 +156,7 @@ private: // メンバ変数
 	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<Sprite*, 9> lifeGauge{ {} };
 	std::array<Sprite*, 16> bombGauge{ {} };
+	std::array<Sprite*, 3> playerLevelSprite{ {} };
 	Model* enemyModel = nullptr;
 
 	//座標(Position)

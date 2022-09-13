@@ -125,43 +125,55 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(19, L"Resources/BombGage/BombGage12.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(20, L"Resources/BombGage/BombGage14.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(21, L"Resources/BombGage/BombGage16.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(22, L"Resources/BombGage/BombGage18.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(23, L"Resources/BombGage/BombGage20.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(24, L"Resources/BombGage/BombGage22.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(25, L"Resources/BombGage/BombGage24.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(26, L"Resources/BombGage/BombGage26.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(27, L"Resources/BombGage/BombGage28.png")) {
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+	if (!Sprite::LoadTexture(28, L"Resources/BombGage/BombGage30.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(29, L"Resources/PlayerLevel/PlayerLevel1.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(30, L"Resources/PlayerLevel/PlayerLevel2.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(31, L"Resources/PlayerLevel/PlayerLevel3.png")) {
 		assert(0);
 		return;
 	}
@@ -172,6 +184,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	for (int i = 0; i < 9; i++)
 	{
 		lifeGauge[i] = Sprite::Create((i + 4), { 1070.0f, 0.0f });
+	}
+	for (int i = 0; i < 16; i++)
+	{
+		bombGauge[i] = Sprite::Create((i + 13), { 800.0f, 525.0f });
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		playerLevelSprite[i] = Sprite::Create((i + 29), { -20.0f, 525.0f });
 	}
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
@@ -315,10 +335,13 @@ void GameScene::Update()
 	// ↓敵一体を倒したときの処理に差し換えてください↓
 	if (playerLevel < LevelMax)
 	{
-		if (enemyArray[0]->enemyDefeated) // デバッグのみ
+		for (int i = 0; i < 4; i++)
 		{
-			playerLevel++;
-			enemyArray[0]->enemyDefeated = 0;
+			if (enemyArray[i]->enemyDefeated) // デバッグのみ
+			{
+				playerLevel++;
+				enemyArray[i]->enemyDefeated = 0;
+			}
 		}
 	}
 
@@ -349,6 +372,15 @@ void GameScene::Update()
 			playerLevel -= enemyArray[i]->levelDown;
 		}
 	}
+
+	if (playerLevel > LevelMax)
+	{
+		playerLevel = LevelMax;
+	}
+	if (playerLevel < LevelMin)
+	{
+		playerLevel = LevelMin;
+	}
 #pragma endregion
 
 #pragma region プレイヤーボム管理
@@ -356,11 +388,16 @@ void GameScene::Update()
 	{
 		// 敵を倒すとゲージが増える
 		// ↓敵一体を倒したときの処理に差し換えてください↓
-		if (enemyArray[0]->enemyDefeated)
+		for (int i = 0; i < 4; i++)
 		{
-			playerBombGage++;
-			enemyArray[0]->enemyDefeated = 0;
+			if (enemyArray[i]->enemyDefeated)
+			{
+				playerBombGage++;
+				enemyArray[i]->enemyDefeated = 0;
+			}
 		}
+
+		BombGageHalf = playerBombGage / 2;
 
 		// ゲージがマックスの時、ボムフラグをオンにする
 		if (playerBombGage == BombGageMax)
@@ -379,19 +416,25 @@ void GameScene::Update()
 			//
 
 			bombFlag = 0;
-			playerBombGage = 0;
-			enemyArray[0]->enemyDefeated = 0;
 			for (int i = 0; i < 4; i++)
 			{
 				enemyArray[i]->defeated = true;
+				enemyArray[i]->enemyDefeated = 0;
+				playerScoreValue += 50;
 			}
 
-			objRareEnemy->defeated = true;
+			if (objRareEnemy->active == true)
+			{
+				objRareEnemy->defeated = true;
+				playerScoreValue += 100;
+			}
 
 			for (int i = 0; i < 100; i++)
 			{
 				CreateBombParticles(rand() % 401 - 200.0f, rand() % 401 - 200.0f);
 			}
+
+			playerBombGage = 0;
 		}
 	}
 #pragma endregion
@@ -403,6 +446,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bullet->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 			{
 				enemyArray[i]->defeated = true;
+				playerScoreValue += 50;
 			}
 		}
 
@@ -410,6 +454,7 @@ void GameScene::Update()
 		{
 			objRareEnemy->defeated = true;
 			playerLife++;
+			playerScoreValue += 100;
 		}
 	}
 	for (std::unique_ptr<PlayerBullet_R>& bulletR : bullets_R)
@@ -419,6 +464,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bulletR->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 			{
 				enemyArray[i]->defeated = true;
+				playerScoreValue += 50;
 			}
 		}
 
@@ -426,6 +472,7 @@ void GameScene::Update()
 		{
 			objRareEnemy->defeated = true;
 			playerLife++;
+			playerScoreValue += 100;
 		}
 	}
 	for (std::unique_ptr<PlayerBullet_L>& bulletL : bullets_L)
@@ -435,6 +482,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bulletL->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 			{
 				enemyArray[i]->defeated = true;
+				playerScoreValue += 50;
 			}
 		}
 
@@ -442,17 +490,18 @@ void GameScene::Update()
 		{
 			objRareEnemy->defeated = true;
 			playerLife++;
+			playerScoreValue += 100;
 		}
 	}
 
 	// パーティクル生成
-	if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			CreateParticles(enemyArray[i]->GetPosition().x, enemyArray[i]->GetPosition().z);
-		}
-	}
+	//if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
+	//{
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		CreateParticles(enemyArray[i]->GetPosition().x, enemyArray[i]->GetPosition().z);
+	//	}
+	//}
 
 	for (int i = 0; i < 4; i++) // 敵がライフに命中するとパーティクルを作成します
 	{
@@ -507,18 +556,18 @@ void GameScene::Update()
 
 #pragma region デバックテキスト
 	// プレイヤーのレベルを表示
-	std::ostringstream PlayerLevel;
+	/*std::ostringstream PlayerLevel;
 	PlayerLevel << "PlayerLevel:("
 		<< std::fixed << std::setprecision(0)
 		<< playerLevel << ")";
-	debugText->Print(PlayerLevel.str(), 50, 90, 1.0f);
+	debugText->Print(PlayerLevel.str(), 50, 90, 1.0f);*/
 
 	// プレイヤーの速度を表示
-	std::ostringstream PlayerSpeed;
+	/*std::ostringstream PlayerSpeed;
 	PlayerSpeed << "PlayerSpeed:("
 		<< std::fixed << std::setprecision(1)
 		<< playerSpeed << ")";
-	debugText->Print(PlayerSpeed.str(), 50, 110, 1.0f);
+	debugText->Print(PlayerSpeed.str(), 50, 110, 1.0f);*/
 
 	// プレイヤーの弾種を表示
 	/*std::ostringstream PlayerBulletType;
@@ -528,24 +577,30 @@ void GameScene::Update()
 	debugText->Print(PlayerBulletType.str(), 50, 130, 1.0f);*/
 
 	// プレイヤーの速度を表示
-	std::ostringstream PlayerBombGage;
+	/*std::ostringstream PlayerBombGage;
 	PlayerBombGage << "PlayerBombGage:("
 		<< std::fixed << std::setprecision(0)
 		<< playerBombGage << ")";
-	debugText->Print(PlayerBombGage.str(), 50, 130, 1.0f);
+	debugText->Print(PlayerBombGage.str(), 50, 130, 1.0f);*/
 
 	// プレイヤーの速度を表示
-	std::ostringstream BombFlag;
+	/*std::ostringstream BombFlag;
 	BombFlag << "BombFlag:("
 		<< std::fixed << std::setprecision(0)
 		<< bombFlag << ")";
-	debugText->Print(BombFlag.str(), 50, 150, 1.0f);
+	debugText->Print(BombFlag.str(), 50, 150, 1.0f);*/
 
 	std::ostringstream playerLifeNumber;
 	playerLifeNumber
 		<< std::fixed << std::setprecision(0)
 		<< playerLife;
 	debugText->Print(playerLifeNumber.str(), 1150.0f, 45.0f, 5.0f);
+
+	std::ostringstream playerScore;
+	playerScore << "SCORE "
+		<< std::fixed << std::setprecision(0)
+		<< playerScoreValue;
+	debugText->Print(playerScore.str(), 20.0f, 20.0f, 5.0f);
 #pragma endregion
 
 	//Playerbullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
@@ -690,6 +745,86 @@ void GameScene::Draw()
 	for (int i = 0; i < playerLife + 1; i++)
 	{
 		lifeGauge[i]->Draw();
+	}
+	
+	switch (playerBombGage)
+	{
+	case 0:
+	case 1:
+		bombGauge[0]->Draw();
+		break;
+	case 2:
+	case 3:
+		bombGauge[1]->Draw();
+		break;
+	case 4:
+	case 5:
+		bombGauge[2]->Draw();
+		break;
+	case 6:
+	case 7:
+		bombGauge[3]->Draw();
+		break;
+	case 8:
+	case 9:
+		bombGauge[4]->Draw();
+		break;
+	case 10:
+	case 11:
+		bombGauge[5]->Draw();
+		break;
+	case 12:
+	case 13:
+		bombGauge[6]->Draw();
+		break;
+	case 14:
+	case 15:
+		bombGauge[7]->Draw();
+		break;
+	case 16:
+	case 17:
+		bombGauge[8]->Draw();
+		break;
+	case 18:
+	case 19:
+		bombGauge[9]->Draw();
+		break;
+	case 20:
+	case 21:
+		bombGauge[10]->Draw();
+		break;
+	case 22:
+	case 23:
+		bombGauge[11]->Draw();
+		break;
+	case 24:
+	case 25:
+		bombGauge[12]->Draw();
+		break;
+	case 26:
+	case 27:
+		bombGauge[13]->Draw();
+		break;
+	case 28:
+	case 29:
+		bombGauge[14]->Draw();
+		break;
+	case 30:
+		bombGauge[15]->Draw();
+		break;
+	}
+
+	switch (playerLevel)
+	{
+	case 1:
+		playerLevelSprite[0]->Draw();
+		break;
+	case 2:
+		playerLevelSprite[1]->Draw();
+		break;
+	case 3:
+		playerLevelSprite[2]->Draw();
+		break;
 	}
 
 	// デバッグテキストの描画
