@@ -107,7 +107,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	for (int i = 0; i < 9; i++)
 	{
-		lifeGauge[i] = Sprite::Create((i + 4), { 1139.0f, 20.0f });
+		lifeGauge[i] = Sprite::Create((i + 4), { 1070.0f, 0.0f });
 	}
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
@@ -481,7 +481,7 @@ void GameScene::Update()
 	playerLifeNumber
 		<< std::fixed << std::setprecision(0)
 		<< playerLife;
-	debugText->Print(playerLifeNumber.str(), 1179.0f, 39.0f, 5.0f);
+	debugText->Print(playerLifeNumber.str(), 1150.0f, 45.0f, 5.0f);
 #pragma endregion
 
 	//Playerbullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
