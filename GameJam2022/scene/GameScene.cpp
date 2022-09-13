@@ -101,6 +101,70 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		assert(0);
 		return;
 	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(14, L"Resources/BombGage/BombGage2.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(15, L"Resources/BombGage/BombGage4.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(16, L"Resources/BombGage/BombGage6.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(17, L"Resources/BombGage/BombGage8.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(18, L"Resources/BombGage/BombGage10.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(13, L"Resources/BombGage/BombGage0.png")) {
+		assert(0);
+		return;
+	}
 
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
