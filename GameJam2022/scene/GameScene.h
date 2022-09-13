@@ -157,6 +157,7 @@ private: // メンバ変数
 	std::array<Sprite*, 9> lifeGauge{ {} };
 	std::array<Sprite*, 16> bombGauge{ {} };
 	std::array<Sprite*, 3> playerLevelSprite{ {} };
+	std::array<Sprite*, 2> titleEndingSprite{ {} };
 	Model* enemyModel = nullptr;
 
 	//座標(Position)
@@ -170,5 +171,6 @@ private: // メンバ変数
 	std::array<int, 4> RNG{ {0,0,0,0} };
 
 	int testNum = 0;
+	int gamePlayScene = 0;
 };
 
