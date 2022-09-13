@@ -348,6 +348,38 @@ void GameScene::Update()
 			playerLife++;
 		}
 	}
+	for (std::unique_ptr<PlayerBullet_R>& bulletR : bullets_R)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (circlecircleIntersect(bulletR->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
+			{
+				enemyArray[i]->defeated = true;
+			}
+		}
+
+		if (circlecircleIntersect(bulletR->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
+		{
+			objRareEnemy->defeated = true;
+			playerLife++;
+		}
+	}
+	for (std::unique_ptr<PlayerBullet_L>& bulletL : bullets_L)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (circlecircleIntersect(bulletL->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
+			{
+				enemyArray[i]->defeated = true;
+			}
+		}
+
+		if (circlecircleIntersect(bulletL->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
+		{
+			objRareEnemy->defeated = true;
+			playerLife++;
+		}
+	}
 
 	// パーティクル生成
 	if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
@@ -705,10 +737,10 @@ void GameScene::DiffusionAttack_R()
 		/// <summary>
 		/// 弾生成と初期化
 		/// </summary>
-		std::unique_ptr<PlayerBullet_R> newBullet = PlayerBullet_R::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
+		newBulletR = PlayerBullet_R::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
 
 		//弾を登録
-		bullets_R.push_back(std::move(newBullet));
+		bullets_R.push_back(std::move(newBulletR));
 	}
 }
 
@@ -726,10 +758,10 @@ void GameScene::DiffusionAttack_L()
 		/// <summary>
 		/// 弾生成と初期化
 		/// </summary>
-		std::unique_ptr<PlayerBullet_L> newBullet = PlayerBullet_L::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
+		newBulletL = PlayerBullet_L::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
 
 		//弾を登録
-		bullets_L.push_back(std::move(newBullet));
+		bullets_L.push_back(std::move(newBulletL));
 	}
 }
 

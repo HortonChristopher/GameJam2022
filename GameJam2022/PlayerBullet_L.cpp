@@ -295,9 +295,9 @@ void PlayerBullet_L::Update()
 
 	//更新処理
 	//position.x += 3.0f;
-	position.x += velocity_.m128_f32[0] / 10.0f; // 弾丸を速くしたり
-	position.y += velocity_.m128_f32[1] / 10.0f; // 遅くしたい場合は、
-	position.z += velocity_.m128_f32[2] / 10.0f; // 10.0f を変更します。
+	position.x += velocity_.m128_f32[0] / 4.0f; // 弾丸を速くしたり
+	position.y += velocity_.m128_f32[1] / 4.0f; // 遅くしたい場合は、
+	position.z += velocity_.m128_f32[2] / 4.0f; // 4.0f を変更します。
 
 	// 当たり判定更新 Collision detection update
 	if (collider) {

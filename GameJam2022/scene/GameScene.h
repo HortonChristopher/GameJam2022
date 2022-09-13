@@ -109,8 +109,11 @@ private: // メンバ変数
 	RareEnemy* objRareEnemy = nullptr;
 
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	std::unique_ptr<PlayerBullet> newBullet;
 	std::list<std::unique_ptr<PlayerBullet_R>> bullets_R;
+	std::unique_ptr<PlayerBullet_R> newBulletR;
 	std::list<std::unique_ptr<PlayerBullet_L>> bullets_L;
+	std::unique_ptr<PlayerBullet_L> newBulletL;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
