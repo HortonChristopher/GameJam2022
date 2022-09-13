@@ -104,15 +104,16 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 		gameScene->Update();
 		
 		// Render Texture Drawing
-		postEffect->PreDrawScene(dxCommon->GetCommandList());
+		//postEffect->PreDrawScene(dxCommon->GetCommandList());
 		// ゲームシーンの描画
-		gameScene->Draw();
-		postEffect->PostDrawScene(dxCommon->GetCommandList());
+		
+		//postEffect->PostDrawScene(dxCommon->GetCommandList());
 		// 描画開始
 		dxCommon->PreDraw();
 		// Post effect Drawing
-		postEffect->Draw(dxCommon->GetCommandList());
+		//postEffect->Draw(dxCommon->GetCommandList());
 		// 描画終了
+		gameScene->Draw();
 		dxCommon->PostDraw();
 	}
 	// 各種解放
