@@ -152,6 +152,7 @@ private: // メンバ変数
 
 	std::array<Enemy*, 4> enemyArray{ {} };
 	std::array<Sprite*, 9> lifeGauge{ {} };
+	std::array<Sprite*, 16> bombGauge{ {} };
 	Model* enemyModel = nullptr;
 
 	//座標(Position)
