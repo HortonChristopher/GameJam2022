@@ -101,8 +101,6 @@ private: // メンバ変数
 
 	RareEnemy* objRareEnemy = nullptr;
 
-	
-
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 	Model* modelSkydome = nullptr;
@@ -153,5 +151,7 @@ private: // メンバ変数
 	std::array<int, 4> timer{ {0,0,0,0} };
 	std::array<float, 4> timeToTarget{ {0.0f, 0.0f, 0.0f} };
 	std::array<int, 4> RNG{ {0,0,0,0} };
+
+	int testNum = 0;
 };
 
