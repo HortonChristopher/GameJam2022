@@ -15,6 +15,8 @@
 #include "Enemy.h"
 #include "RareEnemy.h"
 #include "PlayerBullet.h"
+#include "PlayerBullet_R.h"
+#include "PlayerBullet_L.h"
 
 #include <vector>
 #include <array>
@@ -78,6 +80,11 @@ public: // メンバ関数
 	//弾発射用関数
 	void Attack();
 
+	//拡散弾
+	void DiffusionAttack_R();
+
+	void DiffusionAttack_L();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -102,6 +109,8 @@ private: // メンバ変数
 	RareEnemy* objRareEnemy = nullptr;
 
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	std::list<std::unique_ptr<PlayerBullet_R>> bullets_R;
+	std::list<std::unique_ptr<PlayerBullet_L>> bullets_L;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;

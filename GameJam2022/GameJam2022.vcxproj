@@ -110,6 +110,8 @@
     <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object3d.cpp" />
+    <ClCompile Include="PlayerBullet_L.cpp" />
+    <ClCompile Include="PlayerBullet_R.cpp" />
     <ClCompile Include="RareEnemy.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
@@ -161,6 +163,8 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="PlayerBullet_L.h" />
+    <ClInclude Include="PlayerBullet_R.h" />
     <ClInclude Include="QueryCallback.h" />
     <ClInclude Include="RareEnemy.h" />
     <ClInclude Include="RaycastHit.h" />
