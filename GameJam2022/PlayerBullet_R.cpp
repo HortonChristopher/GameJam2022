@@ -294,7 +294,11 @@ void PlayerBullet_R::Update()
 	constBuffB0->Unmap(0, nullptr);
 
 	//更新処理
-	//position.x += 3.0f;
+	//時間経過で消滅
+	if (--DeathTime <= 0)
+	{
+		DeathFlag = true;
+	}
 	position.x += velocity_.m128_f32[0] / 4.0f; // 弾丸を速くしたり
 	position.y += velocity_.m128_f32[1] / 4.0f; // 遅くしたい場合は、
 	position.z += velocity_.m128_f32[2] / 4.0f; // 4.0f を変更します。
