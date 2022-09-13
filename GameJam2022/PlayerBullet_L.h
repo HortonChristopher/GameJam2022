@@ -79,6 +79,8 @@ private: // 静的メンバ変数 Static member variables
 	static Camera* camera;
 	//速度
 	static XMVECTOR velocity_;
+	//寿命
+	static const int LifeTime = 60 * 3;
 
 private:// 静的メンバ関数 Static member function
 
@@ -153,6 +155,8 @@ public: // メンバ関数 Member function
 
 	void UpdateWorldMatrix();
 
+	//デスフラグゲッター
+	bool DeathGetter()const { return DeathFlag; }
 
 	//private: // メンバ変数 Member variables
 protected: // メンバ変数 Member variables
@@ -194,5 +198,10 @@ protected: // メンバ変数 Member variables
 
 	XMVECTOR velocityV;
 
+	//デスタイム
+	int DeathTime = LifeTime;
+
+	//デスフラグ
+	bool DeathFlag = false;
 };
 

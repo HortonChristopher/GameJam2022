@@ -551,6 +551,24 @@ void GameScene::Update()
 	//Playerbullet->SetPosition({ objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
 	//Playerbullet->Update();
 
+	//弾処理
+	//デスフラグが立った弾を削除
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>&bullet)
+	{
+		return bullet->DeathGetter();
+	});
+
+	bullets_R.remove_if([](std::unique_ptr<PlayerBullet_R>& bullet)
+		{
+			return bullet->DeathGetter();
+		});
+
+	bullets_L.remove_if([](std::unique_ptr<PlayerBullet_L>& bullet)
+		{
+			return bullet->DeathGetter();
+		});
+
+
 	Attack();
 
 	//拡散弾
