@@ -317,7 +317,7 @@ void Enemy::Update()
 
 	if (!movementFlag)
 	{
-		timeToTarget = rand() % 300 + 60;
+		timeToTarget = rand() % 1080 + 720;
 
 		x = (0.0f - position.x) / timeToTarget;
 		z = (0.0f - position.z) / timeToTarget;
@@ -343,13 +343,13 @@ void Enemy::Update()
 	//	enemyDefeated++; //デバッグのみ
 	//}
 
-	if (timer > timeToTarget || input->TriggerKey(DIK_RETURN))
+	if (timer > timeToTarget || defeated)
 	{
 		//CreateParticles(position.x, position.z);
 		destruction = true;
 		particlePosition = position;
 
-		if (input->TriggerKey(DIK_RETURN))
+		if (defeated)
 		{
 			enemyDefeated++;
 		}
@@ -378,6 +378,7 @@ void Enemy::Update()
 		}
 
 		movementFlag = false;
+		defeated = false;
 		timer = 0;
 	}
 

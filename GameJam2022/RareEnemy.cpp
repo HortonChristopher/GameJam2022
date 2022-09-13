@@ -318,77 +318,83 @@ void RareEnemy::Update()
 
 	timeToTarget = 360.0f;
 
-	if (!movementFlag)
+	if (spawnTimer > 600.0f)
 	{
+		active = true;
+		spawnTimer = 0;
+	}
+
+	if (active)
+	{
+		if (!movementFlag)
+		{
+			switch (RNG)
+			{
+			case 0:
+				z = (-100.0f - position.z) / timeToTarget;
+				//float x2 = 0.0f - position.x;
+				//float z2 = 0.0f - position.z;
+				//float radians = atan2(z2, x2);
+				//float degrees = XMConvertToDegrees(radians);
+				movementFlag = true;
+				break;
+			case 1:
+				z = (100.0f - position.z) / timeToTarget;
+				//float x2 = 0.0f - position.x;
+				//float z2 = 0.0f - position.z;
+				//float radians = atan2(z2, x2);
+				//float degrees = XMConvertToDegrees(radians);
+				movementFlag = true;
+				break;
+			case 2:
+				z = (-100.0f - position.z) / timeToTarget;
+				//float x2 = 0.0f - position.x;
+				//float z2 = 0.0f - position.z;
+				//float radians = atan2(z2, x2);
+				//float degrees = XMConvertToDegrees(radians);
+				movementFlag = true;
+				break;
+			case 3:
+				z = (100.0f - position.z) / timeToTarget;
+				//float x2 = 0.0f - position.x;
+				//float z2 = 0.0f - position.z;
+				//float radians = atan2(z2, x2);
+				//float degrees = XMConvertToDegrees(radians);
+				movementFlag = true;
+				break;
+			}
+		}
+
+		timer++;
+
 		switch (RNG)
 		{
 		case 0:
-			z = (-100.0f - position.z) / timeToTarget;
-			//float x2 = 0.0f - position.x;
-			//float z2 = 0.0f - position.z;
-			//float radians = atan2(z2, x2);
-			//float degrees = XMConvertToDegrees(radians);
-			movementFlag = true;
+			x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f + 100.0f) - position.x) / timeToTarget;
 			break;
 		case 1:
-			z = (100.0f - position.z) / timeToTarget;
-			//float x2 = 0.0f - position.x;
-			//float z2 = 0.0f - position.z;
-			//float radians = atan2(z2, x2);
-			//float degrees = XMConvertToDegrees(radians);
-			movementFlag = true;
+			x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f + 100.0f) - position.x) / timeToTarget;
 			break;
 		case 2:
-			z = (-100.0f - position.z) / timeToTarget;
-			//float x2 = 0.0f - position.x;
-			//float z2 = 0.0f - position.z;
-			//float radians = atan2(z2, x2);
-			//float degrees = XMConvertToDegrees(radians);
-			movementFlag = true;
+			x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f - 100.0f) - position.x) / timeToTarget;
 			break;
 		case 3:
-			z = (100.0f - position.z) / timeToTarget;
-			//float x2 = 0.0f - position.x;
-			//float z2 = 0.0f - position.z;
-			//float radians = atan2(z2, x2);
-			//float degrees = XMConvertToDegrees(radians);
-			movementFlag = true;
+			x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f - 100.0f) - position.x) / timeToTarget;
 			break;
 		}
-	}
 
-	switch (RNG)
+		SetPosition({ position.x + x, 10.0f, position.z + z });
+	}
+	else
 	{
-	case 0:
-		x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f + 100.0f) - position.x) / timeToTarget;
-		break;
-	case 1:
-		x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f + 100.0f) - position.x) / timeToTarget;
-		break;
-	case 2:
-		x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f - 100.0f) - position.x) / timeToTarget;
-		break;
-	case 3:
-		x = ((sin(XMConvertToRadians(timer * 3.0f)) * 120.0f - 100.0f) - position.x) / timeToTarget;
-		break;
+		spawnTimer++;
 	}
 
-	SetPosition({ position.x + x, 10.0f, position.z + z });
-
-	timer++;
-
-	if (input->TriggerKey(DIK_RETURN))
+	if (timer > timeToTarget || defeated)
 	{
 		//CreateParticles(position.x, position.z);
 		destruction = true;
-		timer = timeToTarget + 1;
-		enemyDefeated++; //デバッグのみ
-	}
-
-	if (timer > timeToTarget)
-	{
-		//CreateParticles(position.x, position.z);
-		destruction = true;
+		active = false;
 		particlePosition = position;
 
 		RNG = rand() % 4;
@@ -410,6 +416,7 @@ void RareEnemy::Update()
 		}
 
 		movementFlag = false;
+		defeated = false;
 		timer = 0;
 	}
 

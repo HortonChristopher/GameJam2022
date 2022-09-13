@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "camera.h"
+#include <algorithm>
 
 using namespace DirectX;
 
@@ -222,7 +223,7 @@ void GameScene::Update()
 
 	if (direction) // プレイヤーが回転する方向を制御するブール値
 	{
-		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
+		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)) });
 		if (!speedBoost)
 		{
 			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + playerSpeed, 0.0f }); // playerSpeedLevel = スピード
@@ -234,7 +235,7 @@ void GameScene::Update()
 	}
 	else // 逆の方向
 	{
-		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 20.0f)) });
+		objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)) });
 		if (!speedBoost)
 		{
 			objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - playerSpeed, 0.0f }); // playerSpeedLevel = スピード
@@ -316,6 +317,12 @@ void GameScene::Update()
 			bombFlag = 0;
 			playerBombGage = 0;
 			enemyArray[0]->enemyDefeated = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				enemyArray[i]->defeated = true;
+			}
+
+			objRareEnemy->defeated = true;
 
 			for (int i = 0; i < 100; i++)
 			{
@@ -324,6 +331,23 @@ void GameScene::Update()
 		}
 	}
 #pragma endregion
+
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (circlecircleIntersect(bullet->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
+			{
+				enemyArray[i]->defeated = true;
+			}
+		}
+
+		if (circlecircleIntersect(bullet->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
+		{
+			objRareEnemy->defeated = true;
+			playerLife++;
+		}
+	}
 
 	// パーティクル生成
 	if (input->TriggerKey(DIK_RETURN)) // デバッグ全部の敵を殺す
@@ -601,6 +625,20 @@ int GameScene::intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float re
 	return (cornerDistance_sq <= (circleR * circleR));
 }
 
+int GameScene::circlecircleIntersect(XMFLOAT3 c1, XMFLOAT3 c2, float r1, float r2)
+{
+	float d = sqrtf((c1.x - c2.x) * (c1.x - c2.x) + (c1.z - c2.z) * (c1.z - c2.z));
+
+	if (d <= r1 - r2 || d <= r2 - r1 || d < r1 + r2)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void GameScene::Attack()
 {
 	if (input->TriggerKey(DIK_SPACE))
@@ -615,7 +653,7 @@ void GameScene::Attack()
 		/// <summary>
 		/// 弾生成と初期化
 		/// </summary>
-		std::unique_ptr<PlayerBullet> newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
+		newBullet = PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z }, { objTurret->GetRotation().x, objTurret->GetRotation().y, objTurret->GetRotation().z }, velocity);
 		//newBullet->PlayerBullet::Create(Bullet_Model, camera, { objTurret->GetPosition().x, objTurret->GetPosition().y, objTurret->GetPosition().z });
 		//newBullet->PlayerBullet::Create(Bullet_Model,camera, TurretPos);
 
@@ -623,5 +661,3 @@ void GameScene::Attack()
 		bullets_.push_back(std::move(newBullet));
 	}
 }
-
-

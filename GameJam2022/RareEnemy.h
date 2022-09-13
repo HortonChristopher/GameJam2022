@@ -199,11 +199,14 @@ protected: // メンバ変数 Member variables
 	float timeToTarget = 0.0f;
 	bool movementFlag = false;
 	int RNG = 0;
+	int spawnTimer = 0;
 
 public:
 
+	bool active = false;
+	bool defeated = false;
 	bool destruction = false;
 	XMFLOAT3 particlePosition = { 0.0f, 10.0f, 0.0f };
 	int enemyDefeated = 0; // デバッグのみ
-	int spawnTimer = 0;
+	//int spawnTimer = 0;
 };

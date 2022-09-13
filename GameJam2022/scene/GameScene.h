@@ -73,7 +73,7 @@ public: // メンバ関数
 	void CreateBombParticles(float x, float z);
 
 	int intersect(XMFLOAT3 player, XMFLOAT3 wall, float circleR, float rectW, float rectH);
-
+	int circlecircleIntersect(XMFLOAT3 c1, XMFLOAT3 c2, float r1, float r2);
 
 	//弾発射用関数
 	void Attack();
@@ -102,6 +102,7 @@ private: // メンバ変数
 	RareEnemy* objRareEnemy = nullptr;
 
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	std::unique_ptr<PlayerBullet> newBullet;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
