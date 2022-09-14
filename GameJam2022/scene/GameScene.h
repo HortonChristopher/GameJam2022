@@ -178,5 +178,9 @@ private: // メンバ変数
 	bool rLeftRight = false;
 
 	int gamePlayScene = 0;
+
+	//オーディオのボリューム
+	const float Volume_Title = 0.07f;
+
 };
 
