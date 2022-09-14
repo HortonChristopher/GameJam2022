@@ -1064,8 +1064,8 @@ void GameScene::Attack()
 		audio->PlayWave("Shot.wav", Volume_Title);
 
 		//弾の速度
-		const float Speed = 1.0f;
-		XMVECTOR velocity = { 0, 0, -Speed };
+		const float Speed = 3.0f;
+		XMVECTOR velocity = { 0, Speed, 0 };
 
 		//速度ベクトルに合わせて回転させる
 		velocity = XMVector3Transform(velocity, objTurret->GetMatWorld());
