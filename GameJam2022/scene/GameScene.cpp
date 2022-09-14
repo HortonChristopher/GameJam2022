@@ -290,10 +290,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objLife->SetScale({ 5.0f, 5.0f, 5.0f }); // 3 3 3
 
 
-	for (int i = 0; i < 4; i++)
-	{
-		enemyArray[i]->SetScale({ 5.0f, 5.0f, 5.0f });
-	}
+	//for (int i = 0; i < 4; i++)
+	//{
+		//enemyArray[i]->SetScale({ 5.0f, 5.0f, 5.0f });
+	//}
 
 	//objTurret->SetRotation({ 0.0f, 180.0f, 0.0f });
 
