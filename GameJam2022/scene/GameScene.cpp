@@ -229,7 +229,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
-	modelTurret = Model::CreateFromOBJ("chr_sword");
+	modelTurret = Model::CreateFromOBJ("player");
 	modelLife = Model::CreateFromOBJ("Core");
 	enemyModel = Model::CreateFromOBJ("box1x1x1");
 	Bullet_Model = Model::CreateFromOBJ("bullet2");
@@ -338,7 +338,7 @@ void GameScene::Update()
 
 		if (direction) // プレイヤーが回転する方向を制御するブール値
 		{
-			objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)) });
+			objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 12.5f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 12.5f)) });
 			if (!speedBoost)
 			{
 				objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y + playerSpeed, 0.0f }); // playerSpeedLevel = スピード
@@ -350,7 +350,7 @@ void GameScene::Update()
 		}
 		else // 逆の方向
 		{
-			objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y - 180.0f)) * 10.0f)) });
+			objTurret->SetPosition({ (/*objTurret->GetPosition().x +*/ (sinf(XMConvertToRadians(objTurret->GetRotation().y)) * 12.5f)), 10.0f, (/*objTurret->GetPosition().z +*/ (cosf(XMConvertToRadians(objTurret->GetRotation().y)) * 12.5f)) });
 			if (!speedBoost)
 			{
 				objTurret->SetRotation({ 0.0f, objTurret->GetRotation().y - playerSpeed, 0.0f }); // playerSpeedLevel = スピード
