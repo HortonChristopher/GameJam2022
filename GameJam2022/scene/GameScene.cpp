@@ -440,6 +440,7 @@ void GameScene::Update()
 			{
 				if (enemyArray[i]->enemyDefeated)
 				{
+					audio->PlayWave("Kill.wav", Volume_Title);
 					playerBombGage++;
 					enemyArray[i]->enemyDefeated = 0;
 				}
@@ -474,7 +475,6 @@ void GameScene::Update()
 
 				if (objRareEnemy->active == true)
 				{
-					audio->PlayWave("Kill.wav", Volume_Title);
 					objRareEnemy->defeated = true;
 					playerScoreValue += 100;
 				}
@@ -560,13 +560,12 @@ void GameScene::Update()
 		{
 			if (enemyArray[i]->destruction)
 			{
-				audio->PlayWave("Damage.wav", Volume_Title);
 				CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
 			}
 
 			if (enemyArray[i]->timer > enemyArray[i]->timeToTarget)
 			{
-
+				audio->PlayWave("Damage.wav", Volume_Title);
 			}
 		}
 
