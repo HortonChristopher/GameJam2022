@@ -85,6 +85,8 @@ public: // メンバ関数
 
 	void DiffusionAttack_L();
 
+	void GameReset();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;

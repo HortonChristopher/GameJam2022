@@ -666,7 +666,7 @@ void GameScene::Update()
 		hiScore << "HIGH SCORE "
 			<< std::fixed << std::setprecision(0)
 			<< std::setw(7) << std::setfill('0') << sessionHighScoreValue;
-		debugText->Print(hiScore.str(), 250.0f, 260.0f, 5.0f);
+		debugText->Print(hiScore.str(), 235.0f, 260.0f, 5.0f);
 		break;
 	}
 }
@@ -1017,4 +1017,8 @@ void GameScene::DiffusionAttack_L()
 		//弾を登録
 		bullets_L.push_back(std::move(newBulletL));
 	}
+}
+
+void GameScene::GameReset()
+{
 }
