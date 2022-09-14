@@ -546,6 +546,11 @@ void GameScene::Update()
 			{
 				CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
 			}
+
+			if (enemyArray[i]->timer > enemyArray[i]->timeToTarget)
+			{
+
+			}
 		}
 
 		if (input->TriggerKey(DIK_R))

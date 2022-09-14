@@ -195,8 +195,8 @@ protected: // ƒƒ“ƒo•Ï” Member variables
 
 	float x = 0.0f;
 	float z = 0.0f;
-	float timeToTarget = 0.0f;
 	int RNG = 0;
+	float degrees = 0.0f;
 
 public:
 
@@ -208,5 +208,6 @@ public:
 	int levelDown = 0;
 	bool movementFlag = false;
 	int timer = 0;
+	float timeToTarget = 0.0f;
 };
 
