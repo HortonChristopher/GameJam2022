@@ -235,7 +235,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objTurret->SetPosition(TurretPos);
-	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
+	objLife->SetRotation(lifeRotation);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -270,9 +270,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
-	//objLife->SetPosition({ -30.0f, 10.0f ,0.0f });
-	objLife->SetScale({ 20.0f, 20.0f, 20.0f }); // 3 3 3
-	//objLife->SetRotation({ 0.0f, 0.0f, 0.0f });
+	objLife->SetPosition({ 0.0f, 10.0f ,0.0f });
+	objLife->SetScale({ 5.0f, 5.0f, 5.0f }); // 3 3 3
 
 
 	for (int i = 0; i < 4; i++)
@@ -563,6 +562,41 @@ void GameScene::Update()
 		{
 			playerLife = 8;
 		}
+
+		if (lifeRotation.x > 45.0f)
+		{
+			rUpDown = false;
+		}
+		else if (lifeRotation.x < -45.0f)
+		{
+			rUpDown = true;
+		}
+		if (rUpDown)
+		{
+			lifeRotation.x += 0.4f;
+		}
+		else
+		{
+			lifeRotation.x -= 0.4f;
+		}
+		lifeRotation.y += 2.5f;
+		if (lifeRotation.z > 45.0f)
+		{
+			rLeftRight = false;
+		}
+		else if (lifeRotation.z < -45.0f)
+		{
+			rLeftRight = true;
+		}
+		if (rLeftRight)
+		{
+			lifeRotation.z += 0.4f;
+		}
+		else
+		{
+			lifeRotation.z -= 0.4f;
+		}
+		objLife->SetRotation(lifeRotation);
 
 #pragma region アップデート
 		objTurret->Update();

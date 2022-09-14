@@ -173,6 +173,10 @@ private: // メンバ変数
 	std::array<float, 4> timeToTarget{ {0.0f, 0.0f, 0.0f} };
 	std::array<int, 4> RNG{ {0,0,0,0} };
 
+	XMFLOAT3 lifeRotation = { 0.0f, 0.0f, 0.0f };
+	bool rUpDown = false;
+	bool rLeftRight = false;
+
 	int gamePlayScene = 0;
 };
 
