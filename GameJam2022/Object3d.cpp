@@ -240,8 +240,6 @@ Object3d *Object3d::Create( Model *model )
 	return object3d;
 }
 
-
-
 bool Object3d::Initialize()
 {
 	// nullptrチェック nullptr check

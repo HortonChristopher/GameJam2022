@@ -222,7 +222,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelTurret = Model::CreateFromOBJ("chr_sword");
-	modelLife = Model::CreateFromOBJ("sphere");
+	modelLife = Model::CreateFromOBJ("Core");
 	enemyModel = Model::CreateFromOBJ("box1x1x1");
 	Bullet_Model = Model::CreateFromOBJ("bullet2");
 
@@ -270,7 +270,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objSkydome->SetScale({ 5.0f, 5.0f, 5.0f });
 	objGround->SetScale({ 100.0f, 0.0f, 100.0f });
 	objTurret->SetScale({ 3.0f, 3.0f, 3.0f });
-	objLife->SetScale({ 3.0f, 3.0f, 3.0f });
+	//objLife->SetPosition({ -30.0f, 10.0f ,0.0f });
+	objLife->SetScale({ 20.0f, 20.0f, 20.0f }); // 3 3 3
+	//objLife->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 
 	for (int i = 0; i < 4; i++)
