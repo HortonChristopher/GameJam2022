@@ -163,6 +163,7 @@ private: // メンバ変数
 	std::array<Sprite*, 3> playerLevelSprite{ {} };
 	std::array<Sprite*, 2> titleEndingSprite{ {} };
 	Model* enemyModel = nullptr;
+	Sprite* bombSprite = nullptr;
 
 	//座標(Position)
 	XMFLOAT3 TurretPos = { 0.0f, 0.0f, 0.0f };

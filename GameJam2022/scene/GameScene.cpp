@@ -201,6 +201,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		assert(0);
 		return;
 	}
+	if (!Sprite::LoadTexture(34, L"Resources/Bomb.png"))
+	{
+		assert(0);
+		return;
+	}
 
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
@@ -221,6 +226,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	{
 		titleEndingSprite[i] = Sprite::Create((i + 32), { 0.0f, 0.0f });
 	}
+	bombSprite = Sprite::Create(34, { 1095.0f, 545.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
 
@@ -949,6 +955,8 @@ void GameScene::Draw()
 			bombGauge[15]->Draw();
 			break;
 		}
+
+		bombSprite->Draw();
 
 		switch (playerLevel)
 		{
