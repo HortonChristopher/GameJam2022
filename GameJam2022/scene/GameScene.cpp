@@ -586,6 +586,11 @@ void GameScene::Update()
 			}
 		}
 
+		if (objRareEnemy->destruction)
+		{
+			CreateParticles(objRareEnemy->particlePosition.x, objRareEnemy->particlePosition.z);
+		}
+
 		if (input->TriggerKey(DIK_R))
 		{
 			playerLife--;
