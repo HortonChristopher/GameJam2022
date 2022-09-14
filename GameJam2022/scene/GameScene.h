@@ -133,6 +133,7 @@ private: // メンバ変数
 	int LevelMin = 1;
 
 	int playerScoreValue = 0;
+	int sessionHighScoreValue = 0;
 
 	// プレイヤースピード管理
 	float playerSpeed = 0.0f;

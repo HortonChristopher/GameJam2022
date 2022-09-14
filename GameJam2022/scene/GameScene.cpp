@@ -296,6 +296,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 void GameScene::Update()
 {
 	std::ostringstream playerScore;
+	std::ostringstream hiScore;
 
 	switch (gamePlayScene)
 	{
@@ -550,6 +551,10 @@ void GameScene::Update()
 		if (playerLife < 1)
 		{
 			playerLife = 0;
+			if (playerScoreValue > sessionHighScoreValue)
+			{
+				sessionHighScoreValue = playerScoreValue;
+			}
 			gamePlayScene++;
 			break;
 		}
@@ -652,9 +657,18 @@ void GameScene::Update()
 		{
 			gamePlayScene = 0;
 		}
+
+		playerScore << "SCORE "
+			<< std::fixed << std::setprecision(0)
+			<< std::setw(7) << std::setfill('0') << playerScoreValue;
+		debugText->Print(playerScore.str(), 340.0f, 360.0f, 5.0f);
+
+		hiScore << "HIGH SCORE "
+			<< std::fixed << std::setprecision(0)
+			<< std::setw(7) << std::setfill('0') << sessionHighScoreValue;
+		debugText->Print(hiScore.str(), 300.0f, 260.0f, 5.0f);
 		break;
 	}
-	
 }
 
 void GameScene::Draw()
@@ -1004,5 +1018,3 @@ void GameScene::DiffusionAttack_L()
 		bullets_L.push_back(std::move(newBulletL));
 	}
 }
-
-
