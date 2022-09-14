@@ -41,6 +41,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 
 	//音声ロード
 	audio->LoadWave("Title.wav");
+	audio->LoadWave("Bomb.wav");
+	audio->LoadWave("Damage.wav");
+	audio->LoadWave("GameScene.wav");
+	audio->LoadWave("Heal.wav");
+	audio->LoadWave("Kill.wav");
+	audio->LoadWave("Result.wav");
+	audio->LoadWave("Shot.wav");
+	audio->LoadWave("Select.wav");
 
 	audio->PlayWave("Title.wav", Volume_Title, true);
 
@@ -311,6 +319,9 @@ void GameScene::Update()
 	case 0:
 		if (input->TriggerKey(DIK_SPACE))
 		{
+			audio->StopWave("Title.wav");
+			audio->PlayWave("Select.wav", Volume_Title);
+			audio->PlayWave("GameScene.wav", Volume_Title);
 			gamePlayScene++;
 		}
 		break;
@@ -451,6 +462,7 @@ void GameScene::Update()
 				//
 				// ボムを使用
 				//
+				audio->PlayWave("Bomb.wav", Volume_Title);
 
 				bombFlag = 0;
 				for (int i = 0; i < 4; i++)
@@ -462,6 +474,7 @@ void GameScene::Update()
 
 				if (objRareEnemy->active == true)
 				{
+					audio->PlayWave("Kill.wav", Volume_Title);
 					objRareEnemy->defeated = true;
 					playerScoreValue += 100;
 				}
@@ -490,6 +503,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bullet->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
 			{
 				objRareEnemy->defeated = true;
+				audio->PlayWave("Heal.wav", Volume_Title);
 				playerLife++;
 				playerScoreValue += 100;
 			}
@@ -508,6 +522,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bulletR->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
 			{
 				objRareEnemy->defeated = true;
+				audio->PlayWave("Heal.wav", Volume_Title);
 				playerLife++;
 				playerScoreValue += 100;
 			}
@@ -526,6 +541,7 @@ void GameScene::Update()
 			if (circlecircleIntersect(bulletL->GetPosition(), objRareEnemy->GetPosition(), 3.0f, 3.0f) == true && objRareEnemy->active == true)
 			{
 				objRareEnemy->defeated = true;
+				audio->PlayWave("Heal.wav", Volume_Title);
 				playerLife++;
 				playerScoreValue += 100;
 			}
@@ -544,6 +560,7 @@ void GameScene::Update()
 		{
 			if (enemyArray[i]->destruction)
 			{
+				audio->PlayWave("Damage.wav", Volume_Title);
 				CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
 			}
 
@@ -574,6 +591,8 @@ void GameScene::Update()
 			{
 				sessionHighScoreValue = playerScoreValue;
 			}
+			audio->StopWave("GameScene.wav");
+			audio->PlayWave("Result.wav", Volume_Title);
 			gamePlayScene++;
 			break;
 		}
@@ -712,6 +731,9 @@ void GameScene::Update()
 	case 2:
 		if (input->TriggerKey(DIK_SPACE))
 		{
+			audio->StopWave("Result.wav");
+			audio->PlayWave("Select.wav", Volume_Title);
+			audio->PlayWave("Title.wav", Volume_Title);
 			GameReset();
 			gamePlayScene = 0;
 		}
@@ -1018,6 +1040,8 @@ void GameScene::Attack()
 {
 	if (input->TriggerKey(DIK_SPACE))
 	{
+		audio->PlayWave("Shot.wav", Volume_Title);
+
 		//弾の速度
 		const float Speed = 1.0f;
 		XMVECTOR velocity = { 0, 0, -Speed };
