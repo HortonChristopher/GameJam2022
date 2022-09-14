@@ -130,6 +130,7 @@ private: // メンバ変数
 	//Model* enemyModel = nullptr;
 
 	// プレイヤーレベル
+	int levelUp = 0;
 	int playerLevel = 1;
 	int LevelMax = 3;
 	int LevelMin = 1;

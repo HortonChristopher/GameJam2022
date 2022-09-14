@@ -370,10 +370,16 @@ void GameScene::Update()
 			{
 				if (enemyArray[i]->enemyDefeated) // デバッグのみ
 				{
-					playerLevel++;
+					levelUp++;
 					enemyArray[i]->enemyDefeated = 0;
 				}
 			}
+		}
+
+		if (levelUp > 4)
+		{
+			playerLevel++;
+			levelUp = 0;
 		}
 
 		// レベル1
@@ -661,9 +667,12 @@ void GameScene::Update()
 
 		Attack();
 
-		//拡散弾
-		DiffusionAttack_R();
-		DiffusionAttack_L();
+		if (playerLevel > 2)
+		{
+			//拡散弾
+			DiffusionAttack_R();
+			DiffusionAttack_L();
+		}
 
 		//弾更新
 		for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
