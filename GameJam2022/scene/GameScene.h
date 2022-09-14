@@ -173,7 +173,6 @@ private: // メンバ変数
 	std::array<float, 4> timeToTarget{ {0.0f, 0.0f, 0.0f} };
 	std::array<int, 4> RNG{ {0,0,0,0} };
 
-	int testNum = 0;
 	int gamePlayScene = 0;
 };
 

@@ -195,9 +195,7 @@ protected: // メンバ変数 Member variables
 
 	float x = 0.0f;
 	float z = 0.0f;
-	int timer = 0;
 	float timeToTarget = 0.0f;
-	bool movementFlag = false;
 	int RNG = 0;
 
 public:
@@ -208,5 +206,7 @@ public:
 	int enemyDefeated = 0; // デバッグのみ
 	int damage = 0;
 	int levelDown = 0;
+	bool movementFlag = false;
+	int timer = 0;
 };
 

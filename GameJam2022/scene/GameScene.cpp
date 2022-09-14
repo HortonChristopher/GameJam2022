@@ -237,7 +237,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	objTurret->SetPosition(TurretPos);
 	objLife->SetPosition({ 0.0f, 0.0f, 0.0f });
 
-
 	for (int i = 0; i < 4; i++)
 	{
 		int RNG = rand() % 1;
@@ -655,6 +654,7 @@ void GameScene::Update()
 	case 2:
 		if (input->TriggerKey(DIK_SPACE))
 		{
+			GameReset();
 			gamePlayScene = 0;
 		}
 
@@ -667,6 +667,8 @@ void GameScene::Update()
 			<< std::fixed << std::setprecision(0)
 			<< std::setw(7) << std::setfill('0') << sessionHighScoreValue;
 		debugText->Print(hiScore.str(), 235.0f, 260.0f, 5.0f);
+
+		particleMan->Update();
 		break;
 	}
 }
@@ -1021,4 +1023,45 @@ void GameScene::DiffusionAttack_L()
 
 void GameScene::GameReset()
 {
+	playerLevel = 1;
+	playerBombGage = 0;
+	bombFlag = 0;
+	playerLife = 8;
+	TurretPos = { 0.0f, 0.0f, 0.0f };
+	objTurret->SetRotation({ 0.0f, 0.0f, 0.0f });
+	playerScoreValue = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		int RNG = rand() % 1;
+		int RNG2 = rand() % 1;
+		if (RNG == 1)
+		{
+			if (RNG2 == 1)
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 - 150.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+			else
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+		}
+		else
+		{
+			if (RNG2 == 1)
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 - 150.0f });
+			}
+			else
+			{
+				enemyArray[i]->SetPosition({ rand() % 101 + 50.0f, 10.0f, rand() % 101 + 50.0f });
+			}
+		}
+
+		enemyArray[i]->defeated = false;
+		enemyArray[i]->damage = 0;
+		enemyArray[i]->destruction = false;
+		enemyArray[i]->levelDown = 0;
+		enemyArray[i]->movementFlag = false;
+		enemyArray[i]->timer = 0;
+	}
 }
