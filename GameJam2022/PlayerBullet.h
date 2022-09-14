@@ -198,6 +198,7 @@ protected: // メンバ変数 Member variables
 	float velocityVz = 0.0f;
 
 	XMVECTOR velocityV;
+	bool velocitySet = false;
 
 	//デスタイム
 	int DeathTime = LifeTime;

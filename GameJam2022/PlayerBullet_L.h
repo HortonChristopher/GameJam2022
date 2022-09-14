@@ -192,11 +192,12 @@ protected: // メンバ変数 Member variables
 	// ビルボード Billboard
 	bool isBillboard = false;
 
+	XMVECTOR velocityV;
+	bool velocitySet = false;
+
 	float velocityVx = 0.0f;
 	float velocityVy = 0.0f;
 	float velocityVz = 0.0f;
-
-	XMVECTOR velocityV;
 
 	//デスタイム
 	int DeathTime = LifeTime;
