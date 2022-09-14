@@ -201,7 +201,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 		assert(0);
 		return;
 	}
-	if (!Sprite::LoadTexture(34, L"Resources/Bomb.png"))
+	if (!Sprite::LoadTexture(34, L"Resources/Guid1.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(35, L"Resources/Guid2.png")) {
+		assert(0);
+		return;
+	}
+	if (!Sprite::LoadTexture(36, L"Resources/Bomb.png"))
 	{
 		assert(0);
 		return;
@@ -222,11 +230,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	{
 		playerLevelSprite[i] = Sprite::Create((i + 29), { -20.0f, 525.0f });
 	}
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		titleEndingSprite[i] = Sprite::Create((i + 32), { 0.0f, 0.0f });
 	}
-	bombSprite = Sprite::Create(34, { 1095.0f, 545.0f });
+	bombSprite = Sprite::Create(36, { 1095.0f, 545.0f });
 	// パーティクルマネージャ生成
 	particleMan = ParticleManager::Create(dxCommon->GetDevice(), camera);
 
@@ -325,10 +333,25 @@ void GameScene::Update()
 	case 0:
 		if (input->TriggerKey(DIK_SPACE))
 		{
-			audio->StopWave("Title.wav");
-			audio->PlayWave("Select.wav", Volume_Title);
-			audio->PlayWave("GameScene.wav", Volume_Title, true);
-			gamePlayScene++;
+			switch (pageNo)
+			{
+			case 0:
+				audio->PlayWave("Select.wav", Volume_Title);
+				pageNo = 2;
+			case 1:
+				break;
+			case 2:
+				audio->PlayWave("Select.wav", Volume_Title);
+				pageNo++;
+				break;
+			case 3:
+				audio->StopWave("Title.wav");
+				audio->PlayWave("Select.wav", Volume_Title);
+				audio->PlayWave("GameScene.wav", Volume_Title, true);
+				gamePlayScene++;
+				break;
+			}
+			
 		}
 		break;
 	case 1:
@@ -792,7 +815,20 @@ void GameScene::Draw()
 	switch (gamePlayScene)
 	{
 	case 0:
-		titleEndingSprite[0]->Draw();
+		switch (pageNo)
+		{
+		case 0:
+			titleEndingSprite[0]->Draw();
+			break;
+		case 1:
+			break;
+		case 2:
+			titleEndingSprite[2]->Draw();
+			break;
+		case 3:
+			titleEndingSprite[3]->Draw();
+			break;
+		}
 		break;
 	case 1:
 		spriteBG->Draw();
@@ -1134,6 +1170,7 @@ void GameScene::DiffusionAttack_L()
 
 void GameScene::GameReset()
 {
+	pageNo = 0;
 	playerLevel = 1;
 	playerBombGage = 0;
 	bombFlag = 0;

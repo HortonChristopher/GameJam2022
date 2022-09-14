@@ -161,7 +161,8 @@ private: // メンバ変数
 	std::array<Sprite*, 9> lifeGauge{ {} };
 	std::array<Sprite*, 16> bombGauge{ {} };
 	std::array<Sprite*, 3> playerLevelSprite{ {} };
-	std::array<Sprite*, 2> titleEndingSprite{ {} };
+	std::array<Sprite*, 4> titleEndingSprite{ {} };
+	int pageNo = 0;
 	Model* enemyModel = nullptr;
 	Sprite* bombSprite = nullptr;
 
