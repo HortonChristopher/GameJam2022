@@ -208,6 +208,6 @@ public:
 	int levelDown = 0;
 	bool movementFlag = false;
 	int timer = 0;
-	float timeToTarget = 0.0f;
+	int timeToTarget = 0;
 };
 

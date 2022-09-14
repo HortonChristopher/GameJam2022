@@ -440,7 +440,6 @@ void GameScene::Update()
 			{
 				if (enemyArray[i]->enemyDefeated)
 				{
-					audio->PlayWave("Kill.wav", Volume_Title);
 					playerBombGage++;
 					enemyArray[i]->enemyDefeated = 0;
 				}
@@ -495,6 +494,7 @@ void GameScene::Update()
 			{
 				if (circlecircleIntersect(bullet->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 				{
+					audio->PlayWave("Kill.wav", Volume_Title);
 					enemyArray[i]->defeated = true;
 					playerScoreValue += 50;
 				}
@@ -514,6 +514,7 @@ void GameScene::Update()
 			{
 				if (circlecircleIntersect(bulletR->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 				{
+					audio->PlayWave("Kill.wav", Volume_Title);
 					enemyArray[i]->defeated = true;
 					playerScoreValue += 50;
 				}
@@ -533,6 +534,7 @@ void GameScene::Update()
 			{
 				if (circlecircleIntersect(bulletL->GetPosition(), enemyArray[i]->GetPosition(), 3.0f, 3.0f) == true)
 				{
+					audio->PlayWave("Kill.wav", Volume_Title);
 					enemyArray[i]->defeated = true;
 					playerScoreValue += 50;
 				}
@@ -563,7 +565,7 @@ void GameScene::Update()
 				CreateParticles(enemyArray[i]->particlePosition.x, enemyArray[i]->particlePosition.z);
 			}
 
-			if (enemyArray[i]->timer > enemyArray[i]->timeToTarget)
+			if (enemyArray[i]->timer >= enemyArray[i]->timeToTarget)
 			{
 				audio->PlayWave("Damage.wav", Volume_Title);
 			}
