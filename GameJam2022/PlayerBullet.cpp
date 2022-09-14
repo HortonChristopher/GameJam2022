@@ -306,9 +306,9 @@ void PlayerBullet::Update()
 		velocitySet = true;
 	}
 
-	position.x += velocityV.m128_f32[0] / 20.0f; // 弾丸を速くしたり
-	position.y += velocityV.m128_f32[1] / 20.0f; // 遅くしたい場合は、
-	position.z += velocityV.m128_f32[2] / 20.0f; // 4.0f を変更します。
+	position.x += velocityV.m128_f32[0] / 4.0f; // 弾丸を速くしたり
+	position.y += velocityV.m128_f32[1] / 4.0f; // 遅くしたい場合は、
+	position.z += velocityV.m128_f32[2] / 4.0f; // 4.0f を変更します。
 
 	// 当たり判定更新 Collision detection update
 	if (collider) {
