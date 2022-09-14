@@ -321,7 +321,7 @@ void GameScene::Update()
 		{
 			audio->StopWave("Title.wav");
 			audio->PlayWave("Select.wav", Volume_Title);
-			audio->PlayWave("GameScene.wav", Volume_Title);
+			audio->PlayWave("GameScene.wav", Volume_Title, true);
 			gamePlayScene++;
 		}
 		break;
@@ -593,7 +593,7 @@ void GameScene::Update()
 				sessionHighScoreValue = playerScoreValue;
 			}
 			audio->StopWave("GameScene.wav");
-			audio->PlayWave("Result.wav", Volume_Title);
+			audio->PlayWave("Result.wav", Volume_Title, true);
 			gamePlayScene++;
 			break;
 		}
@@ -734,7 +734,7 @@ void GameScene::Update()
 		{
 			audio->StopWave("Result.wav");
 			audio->PlayWave("Select.wav", Volume_Title);
-			audio->PlayWave("Title.wav", Volume_Title);
+			audio->PlayWave("Title.wav", Volume_Title, true);
 			GameReset();
 			gamePlayScene = 0;
 		}
