@@ -36,6 +36,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	this->input = input;
 	this->audio = audio;
 
+	//オーディオ初期化
+	audio->Initialize();
+
+	//音声ロード
+	audio->LoadWave("Title.wav");
+
+	audio->PlayWave("Title.wav", Volume_Title, true);
+
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height, input);
 

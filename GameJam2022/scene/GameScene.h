@@ -174,5 +174,9 @@ private: // メンバ変数
 	std::array<int, 4> RNG{ {0,0,0,0} };
 
 	int gamePlayScene = 0;
+
+	//オーディオのボリューム
+	const float Volume_Title = 0.07f;
+
 };
 
