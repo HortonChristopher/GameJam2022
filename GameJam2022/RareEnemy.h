@@ -200,6 +200,10 @@ protected: // ƒƒ“ƒo•Ï” Member variables
 	bool movementFlag = false;
 	int RNG = 0;
 	int spawnTimer = 0;
+	float degrees = 0.0f;
+	float x2 = 0.0f;
+	float z2 = 0.0f;
+	float radians = 0.0f;
 
 public:
 

@@ -209,5 +209,6 @@ public:
 	bool movementFlag = false;
 	int timer = 0;
 	int timeToTarget = 0;
+	int rngMin = 1080;
 };
 

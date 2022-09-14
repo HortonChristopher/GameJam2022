@@ -239,14 +239,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, Audio* audio)
 	modelGround = Model::CreateFromOBJ("ground");
 	modelTurret = Model::CreateFromOBJ("player");
 	modelLife = Model::CreateFromOBJ("Core");
-	enemyModel = Model::CreateFromOBJ("box1x1x1");
+	enemyModel = Model::CreateFromOBJ("RareEnemy");
 	Bullet_Model = Model::CreateFromOBJ("bullet2");
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objTurret->SetModel(modelTurret);
 	objLife->SetModel(modelLife);
-	objRareEnemy->SetModel(modelLife);
+	objRareEnemy->SetModel(enemyModel);
 
 	objSkydome->SetPosition({ 0.0f, 0.0f, 0.0f });
 	objGround->SetPosition({ 0.0f, 0.0f, 0.0f });
@@ -558,6 +558,12 @@ void GameScene::Update()
 		//	}
 		//}
 
+		if (playerScoreValue / 2000 > lastEValueUp && playerScoreValue != 0)
+		{
+			lastEValueUp = playerScoreValue / 2000;
+			eSpeedUp = true;
+		}
+
 		for (int i = 0; i < 4; i++) // 敵がライフに命中するとパーティクルを作成します
 		{
 			if (enemyArray[i]->destruction)
@@ -568,6 +574,15 @@ void GameScene::Update()
 			if (enemyArray[i]->timer >= enemyArray[i]->timeToTarget)
 			{
 				audio->PlayWave("Damage.wav", Volume_Title);
+			}
+
+			if (eSpeedUp)
+			{
+				enemyArray[i]->rngMin -= 40;
+				if (i == 3)
+				{
+					eSpeedUp = false;
+				}
 			}
 		}
 
@@ -1146,5 +1161,6 @@ void GameScene::GameReset()
 		enemyArray[i]->levelDown = 0;
 		enemyArray[i]->movementFlag = false;
 		enemyArray[i]->timer = 0;
+		enemyArray[i]->rngMin = 1080;
 	}
 }

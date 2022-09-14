@@ -332,34 +332,18 @@ void RareEnemy::Update()
 			{
 			case 0:
 				z = (-100.0f - position.z) / timeToTarget;
-				//float x2 = 0.0f - position.x;
-				//float z2 = 0.0f - position.z;
-				//float radians = atan2(z2, x2);
-				//float degrees = XMConvertToDegrees(radians);
 				movementFlag = true;
 				break;
 			case 1:
 				z = (100.0f - position.z) / timeToTarget;
-				//float x2 = 0.0f - position.x;
-				//float z2 = 0.0f - position.z;
-				//float radians = atan2(z2, x2);
-				//float degrees = XMConvertToDegrees(radians);
 				movementFlag = true;
 				break;
 			case 2:
 				z = (-100.0f - position.z) / timeToTarget;
-				//float x2 = 0.0f - position.x;
-				//float z2 = 0.0f - position.z;
-				//float radians = atan2(z2, x2);
-				//float degrees = XMConvertToDegrees(radians);
 				movementFlag = true;
 				break;
 			case 3:
 				z = (100.0f - position.z) / timeToTarget;
-				//float x2 = 0.0f - position.x;
-				//float z2 = 0.0f - position.z;
-				//float radians = atan2(z2, x2);
-				//float degrees = XMConvertToDegrees(radians);
 				movementFlag = true;
 				break;
 			}
@@ -383,6 +367,12 @@ void RareEnemy::Update()
 			break;
 		}
 
+		x2 = 0.0f - position.x;
+		z2 = 0.0f - position.z;
+		radians = atan2(z2, x2);
+		degrees = XMConvertToDegrees(radians);
+
+		SetRotation({ GetRotation().x, -degrees + 90.0f, GetRotation().z });
 		SetPosition({ position.x + x, 10.0f, position.z + z });
 	}
 	else

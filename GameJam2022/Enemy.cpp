@@ -317,7 +317,12 @@ void Enemy::Update()
 
 	if (!movementFlag)
 	{
-		timeToTarget = rand() % 1080 + 720;
+		if (rngMin <= 1)
+		{
+			rngMin = 1;
+		}
+
+		timeToTarget = rand() % 150 + rngMin;
 
 		x = (0.0f - position.x) / timeToTarget;
 		z = (0.0f - position.z) / timeToTarget;

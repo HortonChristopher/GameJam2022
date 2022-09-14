@@ -177,6 +177,8 @@ private: // メンバ変数
 	XMFLOAT3 lifeRotation = { 0.0f, 0.0f, 0.0f };
 	bool rUpDown = false;
 	bool rLeftRight = false;
+	int lastEValueUp = 0;
+	bool eSpeedUp = false;
 
 	int gamePlayScene = 0;
 
